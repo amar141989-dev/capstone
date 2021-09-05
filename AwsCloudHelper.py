@@ -52,3 +52,9 @@ class AwsCloudHelper:
     def create_topic_rule(self):
         pass
 
+    def create_keys_and_certficate(self):
+        response = self.iot_client.create_keys_and_certificate(
+            setAsActive=True|False
+        )
+
+        return response

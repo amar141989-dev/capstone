@@ -1,0 +1,62 @@
+{
+    "thing_name":"thing_0",
+    "mositure":100
+}
+
+thing:
+{
+    "name":"thing_0",
+    "type":"soil_sensor"
+    "group":"account"
+    "subgroup":{
+        name:"sub account",
+        "location":{
+            "lat":12.1234
+            "long":1234
+        }
+    }
+    "associated_thing":[
+        {
+            "name":"springkler1",
+            "type":"sprinkler"
+        }
+    ],
+    "health":"ok"
+},
+{
+    "name":"sprinkler_0",
+    "type":"sprinkler"
+    "group":"account"
+    "subgroup":{
+        name:"sub account",
+        "location":{
+            "lat":12.1234
+            "long":1234
+        }
+    }
+    "associated_thing":[
+        {
+            "name":"thing_0",
+            "type":"soil_sensor"
+        },
+        {
+            "name":"thing_1",
+            "type":"soil_sensor"
+        }
+    ],
+    "health":"ok"
+}
+
+sensor_data{
+    thing_name:thing_0
+    soil_moisture:100
+    humidity:100
+    temperature:20
+}
+
+action_trig{
+    sprinkler:
+    action:start/stop
+    duration:5min 
+    reason:   
+}
