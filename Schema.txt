@@ -1,6 +1,6 @@
 {
     "thing_name":"thing_0",
-    "mositure":100
+    "mositure":0-100
 }
 
 thing:

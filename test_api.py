@@ -35,8 +35,8 @@ ach=AwsCloudHelper("")
 # resultThng= ach.create_thing("thing1","test_type")
 # print("Thing with type: ", str(resultThng))
 
-resultThngGrp=ach.get_thing_group("SubTestGroup1","")
-print("Thing grp: ", resultThngGrp)
+# resultThngGrp=ach.get_thing_group("SubTestGroup1","")
+# print("Thing grp: ", resultThngGrp)
 
 # #Gives error if already exists
 # # resultGrp=ach.create_thing_group("TestGroup","TestDesc","")
@@ -48,8 +48,21 @@ print("Thing grp: ", resultThngGrp)
 # resultSubGrp2 = ach.create_thing_group("SubTestGroup2","TestDesc","TestGroup")
 # print("Subgroup: ", resultSubGrp2)
 
-# resultCert = ach.create_keys_and_certficate()
+# resultCert = ach.create_keys_and_certficate("thing")
 # print("Cert: ", resultCert)
+
+# thing="thing"
+# f= open('./Certificates/' +thing + '_certificate.pem.crt',"w+")
+# f.write(resultCert["certificatePem"])
+# f.close()
+
+# f= open('./Certificates/' +thing + '_private.pem.key',"w+")
+# f.write(resultCert["keyPair"]["PrivateKey"])
+# f.close()
+
+# f= open('./Certificates/' +thing + '_public.pem.key',"w+")
+# f.write(resultCert["keyPair"]["PublicKey"])
+# f.close()
 
 # #Gives already exists error 
 # resultPolicy=ach.create_topic("TestPolicy3");
@@ -61,7 +74,6 @@ print("Thing grp: ", resultThngGrp)
 # resultRule=ach.create_rule("dynamoInsert","Insert into dynamo using field split", "thng", "iot/moisture")
 # print("Result rule: ",resultRule)
 
-#create type
-# create group, create  
+
 #---------------AWS API --End ----------------------------
 

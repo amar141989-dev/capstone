@@ -1,4 +1,6 @@
+from sys import dont_write_bytecode
 import boto3
+import os
 
 class AwsCloudHelper:
 
@@ -81,13 +83,13 @@ class AwsCloudHelper:
     def create_topic_rule(self):
         pass
 
-    def create_keys_and_certficate(self):
+    def create_keys_and_certficate(self,thing_name):
         response = self.iot_client.create_keys_and_certificate(
-            setAsActive=True|False
+            setAsActive=True
         )
 
         return response
-    
+
     def get_thing_type_list(self, thing_type_name):
         response =  None 
         
