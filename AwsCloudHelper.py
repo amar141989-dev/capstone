@@ -161,6 +161,11 @@ class AwsCloudHelper:
 
         return response
     
+    def list_policies(self):
+        response = self.iot_client.list_policies(ascendingOrder=True)
+        return response["policies"]
+    
+
     #Parameters details are case sensitive 
     def create_rule(self, rule_name, rule_desc, table_name, topic_name):
         response = self.iot_client.create_topic_rule(
@@ -183,3 +188,102 @@ class AwsCloudHelper:
         )    
 
         return response["ResponseMetadata"]["RequestId"]   
+
+    def create_root_ca(self):
+        response = self.iot_client.create_certificate_authority(
+            CertificateAuthorityConfiguration={
+                'KeyAlgorithm': 'RSA_2048',
+                'SigningAlgorithm': 'SHA256WITHECDSA'|'SHA384WITHECDSA'|'SHA512WITHECDSA'|'SHA256WITHRSA'|'SHA384WITHRSA'|'SHA512WITHRSA',
+                'Subject': {
+                    'Country': 'string',
+                    'Organization': 'string',
+                    'OrganizationalUnit': 'string',
+                    'DistinguishedNameQualifier': 'string',
+                    'State': 'string',
+                    'CommonName': 'string',
+                    'SerialNumber': 'string',
+                    'Locality': 'string',
+                    'Title': 'string',
+                    'Surname': 'string',
+                    'GivenName': 'string',
+                    'Initials': 'string',
+                    'Pseudonym': 'string',
+                    'GenerationQualifier': 'string'
+                },
+                'CsrExtensions': {
+                    'KeyUsage': {
+                        'DigitalSignature': True|False,
+                        'NonRepudiation': True|False,
+                        'KeyEncipherment': True|False,
+                        'DataEncipherment': True|False,
+                        'KeyAgreement': True|False,
+                        'KeyCertSign': True|False,
+                        'CRLSign': True|False,
+                        'EncipherOnly': True|False,
+                        'DecipherOnly': True|False
+                    },
+                    'SubjectInformationAccess': [
+                        {
+                            'AccessMethod': {
+                                'CustomObjectIdentifier': 'string',
+                                'AccessMethodType': 'CA_REPOSITORY'|'RESOURCE_PKI_MANIFEST'|'RESOURCE_PKI_NOTIFY'
+                            },
+                            'AccessLocation': {
+                                'OtherName': {
+                                    'TypeId': 'string',
+                                    'Value': 'string'
+                                },
+                                'Rfc822Name': 'string',
+                                'DnsName': 'string',
+                                'DirectoryName': {
+                                    'Country': 'string',
+                                    'Organization': 'string',
+                                    'OrganizationalUnit': 'string',
+                                    'DistinguishedNameQualifier': 'string',
+                                    'State': 'string',
+                                    'CommonName': 'string',
+                                    'SerialNumber': 'string',
+                                    'Locality': 'string',
+                                    'Title': 'string',
+                                    'Surname': 'string',
+                                    'GivenName': 'string',
+                                    'Initials': 'string',
+                                    'Pseudonym': 'string',
+                                    'GenerationQualifier': 'string'
+                                },
+                                'EdiPartyName': {
+                                    'PartyName': 'string',
+                                    'NameAssigner': 'string'
+                                },
+                                'UniformResourceIdentifier': 'string',
+                                'IpAddress': 'string',
+                                'RegisteredId': 'string'
+                            }
+                        },
+                    ]
+                }
+            },
+            RevocationConfiguration={
+                'CrlConfiguration': {
+                    'Enabled': True|False,
+                    'ExpirationInDays': 123,
+                    'CustomCname': 'string',
+                    'S3BucketName': 'string',
+                    'S3ObjectAcl': 'PUBLIC_READ'|'BUCKET_OWNER_FULL_CONTROL'
+                },
+                'OcspConfiguration': {
+                    'Enabled': True|False,
+                    'OcspCustomCname': 'string'
+                }
+            },
+            CertificateAuthorityType='ROOT'|'SUBORDINATE',
+            IdempotencyToken='string',
+            KeyStorageSecurityStandard='FIPS_140_2_LEVEL_2_OR_HIGHER'|'FIPS_140_2_LEVEL_3_OR_HIGHER',
+            Tags=[
+                {
+                    'Key': 'string',
+                    'Value': 'string'
+                },
+            ]
+        )
+    

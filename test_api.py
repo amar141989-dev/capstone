@@ -64,6 +64,9 @@ ach=AwsCloudHelper("")
 # f.write(resultCert["keyPair"]["PublicKey"])
 # f.close()
 
+# resultPolicies = ach.list_policies()
+# print("Policy: ", resultPolicies)
+
 # #Gives already exists error 
 # resultPolicy=ach.create_topic("TestPolicy3");
 # print("Policy: ",resultPolicy)
