@@ -134,16 +134,10 @@ class AwsCloudHelper:
             
         return response["thingGroups"]
 
-    def create_topic(self, topic_name):
+    def create_policy(self, policy_name):
         response = self.iot_client.create_policy(
-            policyName=topic_name,
-            policyDocument="{\"Version\": \"2012-10-17\",\"Statement\": [{\"Effect\": \"Allow\",\"Action\": [\"*\"],\"Resource\": [\"*\"]}]}",
-            tags=[
-                {
-                    'Key': 'junk',
-                    'Value': 'junk'
-                },
-            ]
+            policyName=policy_name,
+            policyDocument="{\"Version\": \"2012-10-17\",\"Statement\": [{\"Effect\": \"Allow\",\"Action\": [\"*\"],\"Resource\": [\"*\"]}]}"
         )
 
         result={}
@@ -190,100 +184,46 @@ class AwsCloudHelper:
         return response["ResponseMetadata"]["RequestId"]   
 
     def create_root_ca(self):
-        response = self.iot_client.create_certificate_authority(
-            CertificateAuthorityConfiguration={
-                'KeyAlgorithm': 'RSA_2048',
-                'SigningAlgorithm': 'SHA256WITHECDSA'|'SHA384WITHECDSA'|'SHA512WITHECDSA'|'SHA256WITHRSA'|'SHA384WITHRSA'|'SHA512WITHRSA',
-                'Subject': {
-                    'Country': 'string',
-                    'Organization': 'string',
-                    'OrganizationalUnit': 'string',
-                    'DistinguishedNameQualifier': 'string',
-                    'State': 'string',
-                    'CommonName': 'string',
-                    'SerialNumber': 'string',
-                    'Locality': 'string',
-                    'Title': 'string',
-                    'Surname': 'string',
-                    'GivenName': 'string',
-                    'Initials': 'string',
-                    'Pseudonym': 'string',
-                    'GenerationQualifier': 'string'
-                },
-                'CsrExtensions': {
-                    'KeyUsage': {
-                        'DigitalSignature': True|False,
-                        'NonRepudiation': True|False,
-                        'KeyEncipherment': True|False,
-                        'DataEncipherment': True|False,
-                        'KeyAgreement': True|False,
-                        'KeyCertSign': True|False,
-                        'CRLSign': True|False,
-                        'EncipherOnly': True|False,
-                        'DecipherOnly': True|False
-                    },
-                    'SubjectInformationAccess': [
-                        {
-                            'AccessMethod': {
-                                'CustomObjectIdentifier': 'string',
-                                'AccessMethodType': 'CA_REPOSITORY'|'RESOURCE_PKI_MANIFEST'|'RESOURCE_PKI_NOTIFY'
-                            },
-                            'AccessLocation': {
-                                'OtherName': {
-                                    'TypeId': 'string',
-                                    'Value': 'string'
-                                },
-                                'Rfc822Name': 'string',
-                                'DnsName': 'string',
-                                'DirectoryName': {
-                                    'Country': 'string',
-                                    'Organization': 'string',
-                                    'OrganizationalUnit': 'string',
-                                    'DistinguishedNameQualifier': 'string',
-                                    'State': 'string',
-                                    'CommonName': 'string',
-                                    'SerialNumber': 'string',
-                                    'Locality': 'string',
-                                    'Title': 'string',
-                                    'Surname': 'string',
-                                    'GivenName': 'string',
-                                    'Initials': 'string',
-                                    'Pseudonym': 'string',
-                                    'GenerationQualifier': 'string'
-                                },
-                                'EdiPartyName': {
-                                    'PartyName': 'string',
-                                    'NameAssigner': 'string'
-                                },
-                                'UniformResourceIdentifier': 'string',
-                                'IpAddress': 'string',
-                                'RegisteredId': 'string'
-                            }
-                        },
-                    ]
-                }
-            },
-            RevocationConfiguration={
-                'CrlConfiguration': {
-                    'Enabled': True|False,
-                    'ExpirationInDays': 123,
-                    'CustomCname': 'string',
-                    'S3BucketName': 'string',
-                    'S3ObjectAcl': 'PUBLIC_READ'|'BUCKET_OWNER_FULL_CONTROL'
-                },
-                'OcspConfiguration': {
-                    'Enabled': True|False,
-                    'OcspCustomCname': 'string'
-                }
-            },
-            CertificateAuthorityType='ROOT'|'SUBORDINATE',
-            IdempotencyToken='string',
-            KeyStorageSecurityStandard='FIPS_140_2_LEVEL_2_OR_HIGHER'|'FIPS_140_2_LEVEL_3_OR_HIGHER',
-            Tags=[
-                {
-                    'Key': 'string',
-                    'Value': 'string'
-                },
-            ]
-        )
-    
+        pass
+
+    def create_iot_thing(self, thing_name, thing_type, thing_group, policy_name):
+
+        response=self.get_thing_type_list(thing_type)
+        if not response:
+            raise Exception("Specified thing type does not exists.")
+
+        group_arn=""
+        if len(thing_group)>0:
+            groups=thing_group.split("\\")
+            group=None
+            if len(groups)==1:
+                group=self.get_thing_group(groups[0],"")
+            else:
+                group=self.get_thing_group(groups[1],groups[0])
+            
+            if not group:
+                raise Exception("Specified thing group does not exists.")
+            else:
+                group_arn=group[0]["groupArn"]
+
+        response=self.create_thing(thing_name, thing_type)
+        self.add_thing_to_thing_group(response["thingArn"],group_arn)
+
+        resultCert = self.create_keys_and_certficate(thing_name)
+        f= open('./Certificates/' +thing_name + '_certificate.pem.crt',"w+")
+        f.write(resultCert["certificatePem"])
+        f.close()
+
+        f= open('./Certificates/' +thing_name + '_private.pem.key',"w+")
+        f.write(resultCert["keyPair"]["PrivateKey"])
+        f.close()
+
+        f= open('./Certificates/' +thing_name + '_public.pem.key',"w+")
+        f.write(resultCert["keyPair"]["PublicKey"])
+        f.close()
+        
+        self.attach_policy_to_cert(policy_name, resultCert["certificateArn"])
+        self.attach_policy_to_cert(policy_name, group_arn)
+
+        self.iot_client.attach_thing_principal(thingName=thing_name, principal=resultCert["certificateArn"])
+        return response

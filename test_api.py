@@ -35,7 +35,7 @@ ach=AwsCloudHelper("")
 # resultThng= ach.create_thing("thing1","test_type")
 # print("Thing with type: ", str(resultThng))
 
-# resultThngGrp=ach.get_thing_group("SubTestGroup1","")
+# resultThngGrp=ach.get_thing_group("SubTestGroup1","TestGroup")
 # print("Thing grp: ", resultThngGrp)
 
 # #Gives error if already exists
@@ -68,7 +68,7 @@ ach=AwsCloudHelper("")
 # print("Policy: ", resultPolicies)
 
 # #Gives already exists error 
-# resultPolicy=ach.create_topic("TestPolicy3");
+# resultPolicy=ach.create_policy("TestPolicy3");
 # print("Policy: ",resultPolicy)
 
 # resultAttachPolicy=ach.attach_policy_to_cert("TestPolicy3","arn:aws:iot:us-east-1:221389831253:cert/adeb5f32a8f68433b4e5fbacbe8d57160451c2fb29a4f236794d152833baa1a0");
@@ -80,3 +80,32 @@ ach=AwsCloudHelper("")
 
 #---------------AWS API --End ----------------------------
 
+try:
+    print("1")
+    thing_name="thing1"
+
+    thing_type="TestType1"
+    thing_type_desc="Test description"
+    resultType = ach.create_thing_type(thing_type, thing_type_desc)
+    print("2")
+
+    thing_group="TestGroup"
+    thing_group_desc="Thing group description"
+    ach.create_thing_group(thing_group, thing_group_desc, "")
+    print("3")
+
+    thing_sub_group="SubTestGroup1"
+    thing_sub_group_desc="SubTestGroup1 description"
+    ach.create_thing_group(thing_sub_group, thing_sub_group_desc, thing_group)
+    print("4")
+
+    thing_policy="ThingPolicy"
+    ach.create_policy(thing_policy);
+    print("5")
+
+    result = ach.create_iot_thing(thing_name, thing_type, thing_group + "\\" + thing_sub_group, thing_policy)
+    print("6")
+
+    print(result)
+except Exception as e:
+    print(e)
