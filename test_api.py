@@ -11,10 +11,10 @@
 # print("Humidity: ", one_call.current.humidity, ", temperature: ", one_call.current.temperature('celsius')['temp']) # Eg.: 81
 
 #---------------Open Weather Map API --Start ----------------------------
-# from OpenWeatherMap import OpenWeatherMap
+from OpenWeatherMap import OpenWeatherMap
 
-# owm=OpenWeatherMap("")
-# print(owm.get_humidity_temp(19.0485257,72.8875786))
+owm=OpenWeatherMap("")
+print(owm.get_humidity_temp(19.0485257,72.8875786))
 #---------------Open Weather Map API --End ----------------------------
 
 #---------------AWS API --Start ----------------------------
@@ -29,8 +29,8 @@ ach=AwsCloudHelper("")
 # print("Thing type: ", str(resultType))
 # #print(ach.get_thing_type_list("test_type"))
 
-# resultThingList=ach.get_thing_list("thing1","test_type");
-# print("Thing list: ",resultThingList)
+resultThingList=ach.get_thing_list("","SoilSensor");
+print("Thing list: ",resultThingList)
 
 # resultThng= ach.create_thing("thing1","test_type")
 # print("Thing with type: ", str(resultThng))
@@ -80,32 +80,32 @@ ach=AwsCloudHelper("")
 
 #---------------AWS API --End ----------------------------
 
-try:
-    print("1")
-    thing_name="thing1"
+# try:
+#     print("1")
+#     thing_name="thing1"
 
-    thing_type="TestType1"
-    thing_type_desc="Test description"
-    resultType = ach.create_thing_type(thing_type, thing_type_desc)
-    print("2")
+#     thing_type="TestType1"
+#     thing_type_desc="Test description"
+#     resultType = ach.create_thing_type(thing_type, thing_type_desc)
+#     print("2")
 
-    thing_group="TestGroup"
-    thing_group_desc="Thing group description"
-    ach.create_thing_group(thing_group, thing_group_desc, "")
-    print("3")
+#     thing_group="TestGroup"
+#     thing_group_desc="Thing group description"
+#     ach.create_thing_group(thing_group, thing_group_desc, "")
+#     print("3")
 
-    thing_sub_group="SubTestGroup1"
-    thing_sub_group_desc="SubTestGroup1 description"
-    ach.create_thing_group(thing_sub_group, thing_sub_group_desc, thing_group)
-    print("4")
+#     thing_sub_group="SubTestGroup1"
+#     thing_sub_group_desc="SubTestGroup1 description"
+#     ach.create_thing_group(thing_sub_group, thing_sub_group_desc, thing_group)
+#     print("4")
 
-    thing_policy="ThingPolicy"
-    ach.create_policy(thing_policy);
-    print("5")
+#     thing_policy="ThingPolicy"
+#     ach.create_policy(thing_policy);
+#     print("5")
 
-    result = ach.create_iot_thing(thing_name, thing_type, thing_group + "\\" + thing_sub_group, thing_policy)
-    print("6")
+#     result = ach.create_iot_thing(thing_name, thing_type, thing_group + "\\" + thing_sub_group, thing_policy)
+#     print("6")
 
-    print(result)
-except Exception as e:
-    print(e)
+#     print(result)
+# except Exception as e:
+#     print(e)
