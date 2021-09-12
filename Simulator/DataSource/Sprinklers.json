@@ -1,0 +1,15 @@
+[
+    {
+        "host": "a3vifb8zgia71f-ats.iot.us-east-2.amazonaws.com",
+        "rootCAPath":"E:/2021/AgriTech/capstone/Simulator/DevicesCertificates/AmazonRootCA1.pem",
+        "certificatePath":"E:/2021/AgriTech/capstone/Simulator/DevicesCertificates/69817a2d0e57f5d46e9453e1a8a1ebc99f95df1fe4cf5ddf702e869050e16855-certificate.pem.crt",
+        "privateKeyPath":"E:/2021/AgriTech/capstone/Simulator/DevicesCertificates/69817a2d0e57f5d46e9453e1a8a1ebc99f95df1fe4cf5ddf702e869050e16855-private.pem.key",
+        "port" : 8883,
+        "clientId":"SoilSprinkler",
+        "lat": 16.829780,
+        "lon" :74.590576,
+        "farm":"Farm1",
+        "topic":"sprinkler/",
+        "deviceId" :"SoilSprinkler"
+    }
+]

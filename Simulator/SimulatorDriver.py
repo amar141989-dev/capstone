@@ -1,5 +1,11 @@
 from DeviceSimulators.SensorSimulator import SensorSimulator
 
-# Semsor Simulatorg Simulator
+
+
+
+
+# Senor Simulator 
 sensorsimulator = SensorSimulator()
 sensorsimulator.startSimulation()
+
+
