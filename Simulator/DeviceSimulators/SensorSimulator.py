@@ -6,6 +6,8 @@ from Client.AWSClient import AWSClient
 import schedule
 import time
 import datetime
+import random
+from datetime import timezone
 
 class SensorSimulator:
 
@@ -25,9 +27,10 @@ class SensorSimulator:
             message['deviceId'] = sensor['deviceId']
             message['lat'] = sensor['lat']
             message['lon'] = sensor['lon']
-            message['devicetimestamp']=str(datetime.datetime.now())
+            message['devicetimestamp']=str(datetime.datetime.now(timezone.utc))
             humidity,temperature = OWP.get_humidity_temp(message['lat'],message['lon'])
             message['humidity'] = humidity
+            message['moisture'] = float(random.normalvariate(99, 1.5))
             message['temperature'] = temperature
             message['sprinkler'] = sensor['sprinkler']
             message['farm'] = sensor['farm']
