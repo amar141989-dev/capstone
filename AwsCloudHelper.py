@@ -36,15 +36,26 @@ class AwsCloudHelper:
         
         return result
 
-    def create_thing_group(self, group_name, group_description, parent_group_name):
+    def create_thing_group(self, group_name, group_description, parent_group_name, lat, long):
         response = None
+        tag_list=[]
+
+        if len(group_name)==0:
+            raise Exception("Please specify the group name.")
+
+        if len(lat)==0 or len(long)==0:
+            raise Exception("Please specify the lat and long")
+
+        tag_list.append({'Key': 'lat','Value': '' + lat + ''})
+        tag_list.append({'Key': 'long','Value': '' + long + ''})
         
         if(parent_group_name is None or len(parent_group_name)==0):
            response = self.iot_client.create_thing_group(
                 thingGroupName=group_name,
                 thingGroupProperties={
                     'thingGroupDescription':group_description,
-                    } 
+                    },
+                    tags=tag_list 
                 )    
         else:
             response = self.iot_client.create_thing_group(
@@ -52,13 +63,15 @@ class AwsCloudHelper:
                 parentGroupName=parent_group_name,
                 thingGroupProperties={
                     'thingGroupDescription':group_description,
-                    }
+                    },
+                    tags=tag_list
                 )    
 
         result={}
         
         result['thingGroupName']=response['thingGroupName']
         result['thingGroupArn']=response['thingGroupArn']
+
         result['thingGroupId']=response['thingGroupId']
         
         return result
@@ -227,3 +240,17 @@ class AwsCloudHelper:
 
         self.iot_client.attach_thing_principal(thingName=thing_name, principal=resultCert["certificateArn"])
         return response
+    
+    def get_farm_tags_by_thing(self, thing_name):
+        response = self.iot_client.list_thing_groups_for_thing(
+                    thingName=thing_name
+                 )
+
+        if len(response["thingGroups"])>0:
+            locRes = self.iot_client.list_tags_for_resource(
+                        resourceArn=response["thingGroups"][0]["groupArn"]
+                    )
+            
+            return locRes["tags"]
+
+        return None
