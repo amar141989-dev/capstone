@@ -106,6 +106,7 @@ try:
 
     #result = ach.create_iot_thing(thing_name, thing_type, thing_group + "\\" + thing_sub_group, thing_policy)
     # print("6")
+    
     print(ach.get_farm_tags_by_thing(thing_name))
     #print(ach.get_thing_group("",""))
 except Exception as e:
