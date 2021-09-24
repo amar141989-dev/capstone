@@ -36,18 +36,18 @@ class AwsCloudHelper:
         
         return result
 
-    def create_thing_group(self, group_name, group_description, parent_group_name, lat, long):
+    def create_thing_group(self, group_name, group_description, parent_group_name, lat, lng):
         response = None
         tag_list=[]
 
         if len(group_name)==0:
             raise Exception("Please specify the group name.")
 
-        if len(lat)==0 or len(long)==0:
+        if len(lat)==0 or len(lng)==0:
             raise Exception("Please specify the lat and long")
 
         tag_list.append({'Key': 'lat','Value': '' + lat + ''})
-        tag_list.append({'Key': 'long','Value': '' + long + ''})
+        tag_list.append({'Key': 'lng','Value': '' + lng + ''})
         
         if(parent_group_name is None or len(parent_group_name)==0):
            response = self.iot_client.create_thing_group(
@@ -174,7 +174,7 @@ class AwsCloudHelper:
     
 
     #Parameters details are case sensitive 
-    def create_rule(self, rule_name, rule_desc, table_name, topic_name):
+    def create_rule(self, rule_name, rule_desc, table_name, topic_name, role_arn):
         response = self.iot_client.create_topic_rule(
             ruleName=rule_name,
             topicRulePayload={
@@ -183,7 +183,7 @@ class AwsCloudHelper:
                 'actions': [
                     {
                         'dynamoDBv2': {
-                            'roleArn': 'arn:aws:iam::221389831253:role/service-role/BSM_Dynamo_Role',
+                            'roleArn': role_arn,
                             'putItem': {
                                 'tableName': table_name
                             }
