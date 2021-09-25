@@ -121,4 +121,5 @@ db=Database()
 
 #ach.download_root_ca_if_not_exists()
 #print(ach.get_thing_list("",""))
-print(ach.get_farm_tags_by_thing("thing1"))
+# print(ach.get_farm_tags_by_thing("thing1"))
+print (ach.attach_device_to_thing("SoilSensor1","Sensor","Sprinkler1"))

@@ -4,34 +4,34 @@
         "name" : "Sprinkler1",
         "type":"Sprinkler",
         "group": "Spirit",
-        "subgroup" :"Ashley Farm" 
+        "subgroup" :"AshleyFarm" 
     },
     {
         
         "name" : "Sprinkler2",
         "type":"Sprinkler",
         "group": "Spirit",
-        "subgroup" :"Allison Acres" 
+        "subgroup" :"AllisonAcres" 
     },
     {
         
         "name" : "Sprinkler3",
         "type":"Sprinkler",
         "group": "Ryanair",
-        "subgroup" :"Baker Acres" 
+        "subgroup" :"BakerAcres" 
     },
     {
         
         "name" : "Sprinkler4",
         "type":"Sprinkler",
         "group": "Ryanair",
-        "subgroup" :"Ideal Place" 
+        "subgroup" :"IdealPlace" 
     },
     {
         
         "name" : "Sprinkler5",
         "type":"Sprinkler",
         "group": "Ryanair",
-        "subgroup" :"Ideal Place" 
+        "subgroup" :"IdealPlace" 
     }
 ]

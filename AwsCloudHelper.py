@@ -2,6 +2,7 @@ from sys import dont_write_bytecode
 import boto3
 import os
 import requests
+from botocore.exceptions import ClientError
 
 class AwsCloudHelper:
 
@@ -25,10 +26,12 @@ class AwsCloudHelper:
     def create_policy(self):
         pass
 
-    def create_thing(self, thing_name, thing_type):
+    def create_thing(self, thing_name, thing_type,attributePayloadData):
         response = self.iot_client.create_thing(
             thingName=thing_name,
-            thingTypeName=thing_type
+            thingTypeName=thing_type,
+            attributePayload=attributePayloadData
+
         )
         result={}
         result['thingName']=response['thingName']
@@ -44,36 +47,60 @@ class AwsCloudHelper:
         if len(group_name)==0:
             raise Exception("Please specify the group name.")
 
-        if len(lat)==0 or len(lng)==0:
+        if len(parent_group_name)!=0 and (len(str(lat))==0 or len(str(lng))==0):
             raise Exception("Please specify the lat and long")
 
-        tag_list.append({'Key': 'lat','Value': '' + lat + ''})
-        tag_list.append({'Key': 'lng','Value': '' + lng + ''})
-        
-        if(parent_group_name is None or len(parent_group_name)==0):
-           response = self.iot_client.create_thing_group(
-                thingGroupName=group_name,
-                thingGroupProperties={
-                    'thingGroupDescription':group_description,
-                    },
-                    tags=tag_list 
-                )    
-        else:
-            response = self.iot_client.create_thing_group(
-                thingGroupName=group_name,
-                parentGroupName=parent_group_name,
-                thingGroupProperties={
-                    'thingGroupDescription':group_description,
-                    },
-                    tags=tag_list
-                )    
+       
+        tag_list.append({'Key': 'lat','Value': '' + str(lat) + ''})
+        tag_list.append({'Key': 'lng','Value': '' + str(lng) + ''})
 
+        if len (parent_group_name)==0:
+            tag_list=[]
+        
+        #to be return
         result={}
-        
-        result['thingGroupName']=response['thingGroupName']
-        result['thingGroupArn']=response['thingGroupArn']
 
-        result['thingGroupId']=response['thingGroupId']
+        try:
+
+        
+            if(parent_group_name is None or len(parent_group_name)==0):
+
+                #get thing group if already 
+                response = self.iot_client.create_thing_group(
+                        thingGroupName=group_name,
+                        thingGroupProperties={
+                            'thingGroupDescription':group_description,
+                            },
+                            tags=tag_list 
+                        )    
+            else:
+                response = self.iot_client.create_thing_group(
+                    thingGroupName=group_name,
+                    parentGroupName=parent_group_name,
+                    thingGroupProperties={
+                        'thingGroupDescription':group_description,
+                        },
+                        tags=tag_list
+                    )    
+            result['thingGroupName']=response['thingGroupName']
+            result['thingGroupArn']=response['thingGroupArn']
+
+            result['thingGroupId']=response['thingGroupId']
+           
+        except ClientError as e:
+            if e.response['Error']['Code'] == 'ResourceAlreadyExistsException':
+                print("Resource {0} already exists".format(group_name))
+                responseForThing = self.get_thing_group(group_name,parent_group_name)
+
+                result['thingGroupName']=responseForThing[0]['groupName']
+                result['thingGroupArn']=responseForThing[0]['groupArn']
+
+            else:
+                print("Unexpected error: %s" % e)
+            
+    
+        
+
         
         return result
         
@@ -149,15 +176,27 @@ class AwsCloudHelper:
         return response["thingGroups"]
 
     def create_policy(self, policy_name):
-        response = self.iot_client.create_policy(
-            policyName=policy_name,
-            policyDocument="{\"Version\": \"2012-10-17\",\"Statement\": [{\"Effect\": \"Allow\",\"Action\": [\"*\"],\"Resource\": [\"*\"]}]}"
-        )
-
         result={}
-        result["policyName"]=response["policyName"]
-        result["policyArn"]=response["policyArn"]
-        result["policyVersionId"]=response["policyVersionId"]
+
+        try:
+                
+            response = self.iot_client.create_policy(
+                policyName=policy_name,
+                policyDocument="{\"Version\": \"2012-10-17\",\"Statement\": [{\"Effect\": \"Allow\",\"Action\": [\"*\"],\"Resource\": [\"*\"]}]}"
+            )
+
+            result["policyName"]=response["policyName"]
+            result["policyArn"]=response["policyArn"]
+            result["policyVersionId"]=response["policyVersionId"]
+
+        except ClientError as e:
+            if e.response['Error']['Code'] == 'ResourceAlreadyExistsException':
+                print("Policy {0} already exists".format(policy_name))
+
+                result["policyName"]=policy_name
+
+            else:
+                print("Unexpected error: %s" % e)
 
         return result
     
@@ -200,9 +239,18 @@ class AwsCloudHelper:
     def create_root_ca(self):
         pass
 
-    def create_iot_thing(self, thing_name, thing_type, thing_group, policy_name):
+    def create_iot_thing(self, thing_name, thing_type, thing_group, policy_name, thing_attachedDevice):
 
         response=self.get_thing_type_list(thing_type)
+
+        #create directory fro certificates
+        if not os.path.exists(os.path.dirname("./Certificates/")):
+            try:
+                os.makedirs(os.path.dirname("./Certificates/"))
+                print("Certificate directory created")
+            except OSError as exc: # Guard against race condition
+                if exc.errno != errno.EEXIST:
+                    raise
         if not response:
             raise Exception("Specified thing type does not exists.")
 
@@ -220,7 +268,17 @@ class AwsCloudHelper:
             else:
                 group_arn=group[0]["groupArn"]
 
-        response=self.create_thing(thing_name, thing_type)
+        attributePayloadData={}
+
+        if(len(thing_attachedDevice) > 0):
+            attributePayloadData={
+                'attributes': {
+                    'sprinkler': thing_attachedDevice
+                },
+                'merge': True
+            }
+
+        response=self.create_thing(thing_name, thing_type, attributePayloadData)
         self.add_thing_to_thing_group(response["thingArn"],group_arn)
 
         resultCert = self.create_keys_and_certficate(thing_name)
