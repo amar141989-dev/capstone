@@ -34,7 +34,7 @@ db=Database()
 # resultThingList=ach.get_thing_list("","SoilSensor");
 # print("Thing list: ",resultThingList)
 
-# resultThng= ach.create_thing("thing1","test_type")
+# resultThng= ach.attach_device_to_thing("thing1","Sensor","Sprinkler1")
 # print("Thing with type: ", str(resultThng))
 
 # resultThngGrp=ach.get_thing_group("SubTestGroup1","TestGroup")
@@ -82,40 +82,43 @@ db=Database()
 
 #---------------AWS API --End ----------------------------
 
-try:
-    thing_name="Device1"
+# try:
+#     thing_name="Device1"
 
-    thing_type="Sensor"
-    thing_type_desc="Soil sensors"
-    resultType = ach.create_thing_type(thing_type, thing_type_desc)
+#     thing_type="Sensor"
+#     thing_type_desc="Soil sensors"
+#     resultType = ach.create_thing_type(thing_type, thing_type_desc)
     
-    thing_group="AccountGrp1"
-    thing_group_desc="Account group description"
-    #Group can act as a account 
-    ach.create_thing_group(thing_group, thing_group_desc, "", "20", "30")
+#     thing_group="AccountGrp1"
+#     thing_group_desc="Account group description"
+#     #Group can act as a account 
+#     ach.create_thing_group(thing_group, thing_group_desc, "", "20", "30")
 
-    thing_sub_group="Farm1"
-    thing_sub_group_desc="Farm1 description"
-    #Group can act as a farm inside an account 
-    ach.create_thing_group(thing_sub_group, thing_sub_group_desc, thing_group, "20", "30")
+#     thing_sub_group="Farm1"
+#     thing_sub_group_desc="Farm1 description"
+#     #Group can act as a farm inside an account 
+#     ach.create_thing_group(thing_sub_group, thing_sub_group_desc, thing_group, "20", "30")
 
-    thing_policy="DevicePolicy"
-    ach.create_policy(thing_policy)
+#     thing_policy="DevicePolicy"
+#     ach.create_policy(thing_policy)
 
-    #Create the thing and attach the specifed group, type and poliy to the thing
-    #It will also create certificates in the certicates folder      
-    result = ach.create_iot_thing(thing_name, thing_type, thing_group + "\\" + thing_sub_group, thing_policy)
+#     #Create the thing and attach the specifed group, type and poliy to the thing
+#     #It will also create certificates in the certicates folder      
+#     result = ach.create_iot_thing(thing_name, thing_type, thing_group + "\\" + thing_sub_group, thing_policy)
     
-    print(ach.get_farm_tags_by_thing(thing_name))
+#     print(ach.get_farm_tags_by_thing(thing_name))
     
-    rule_name="dynamoInsert"
-    rule_desc="Insert into dynamo using field split"
-    dynamo_table_name="thng"
-    topic_name="iot/moisture"
-    iam_role_arn="arn:aws:iam::221389831253:role/service-role/BSM_Dynamo_Role"
+#     rule_name="dynamoInsert"
+#     rule_desc="Insert into dynamo using field split"
+#     dynamo_table_name="thng"
+#     topic_name="iot/moisture"
+#     iam_role_arn="arn:aws:iam::221389831253:role/service-role/BSM_Dynamo_Role"
 
-    resultRule=ach.create_rule(rule_name, rule_desc, dynamo_table_name, topic_name, iam_role_arn)
-    print("Result rule: ",resultRule)
-except Exception as e:
-    print(e)
+#     resultRule=ach.create_rule(rule_name, rule_desc, dynamo_table_name, topic_name, iam_role_arn)
+#     print("Result rule: ",resultRule)
+# except Exception as e:
+#     print(e)
 
+#ach.download_root_ca_if_not_exists()
+#print(ach.get_thing_list("",""))
+print(ach.get_farm_tags_by_thing("thing1"))
