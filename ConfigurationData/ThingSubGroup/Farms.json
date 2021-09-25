@@ -1,0 +1,30 @@
+[
+    {
+        "subgroupName": "Allison Acres",
+        "groupDescription":"East Zone",
+        "groupName" :"Spirit" ,
+        "lat":12,
+        "long" :34  
+    },
+    {
+        "subgroupName": "Ashley Farm",
+        "groupDescription":"West Zone",
+        "groupName" :"Spirit"      ,
+        "lat":45,
+        "long" :56  
+    },
+    {
+        "subgroupName": "Baker Acres",
+        "groupDescription":"East Zone",
+        "groupName" :"Ryanair" ,
+        "lat":89,
+        "long" :23   
+    },
+    {
+        "subgroupName": "Ideal Place",
+        "groupDescription":"West Zone",
+        "groupName" :"Ryanair" ,
+        "lat":67,
+        "long" :89       
+    }
+]

@@ -1,0 +1,145 @@
+[
+    {
+        "name" : "Soil Sensor1",
+        "type":"Sensor",
+        "group": "Spirit",
+        "subgroup" :"Ashley Farm",
+        "sprinkler"     :"Sprinkler1"   
+    },
+    {
+        "name" : "Soil Sensor2",
+        "type":"Sensor",
+        "group": "Spirit",
+        "subgroup" :"Ashley Farm"   ,
+        "sprinkler"     :"Sprinkler1"      
+    },
+    {
+        "name" : "Soil Sensor3",
+        "type":"Sensor",
+        "group": "Spirit",
+        "subgroup" :"Ashley Farm" ,
+        "sprinkler"     :"Sprinkler1"        
+    },
+    {
+        "name" : "Soil Sensor4",
+        "type":"Sensor",
+        "group": "Spirit",
+        "subgroup" :"Ashley Farm"  ,
+        "sprinkler"     :"Sprinkler1"       
+    },
+    {
+        "name" : "Soil Sensor5",
+        "type":"Sensor",
+        "group": "Spirit",
+        "subgroup" :"Ashley Farm"  ,
+        "sprinkler"     :"Sprinkler1"       
+    },
+
+    {
+        "name" : "Soil Sensor6",
+        "type":"Sensor",
+        "group": "Spirit",
+        "subgroup" :"Allison Acres",
+        "sprinkler"     :"Sprinkler2"   
+    },
+    {
+        "name" : "Soil Sensor7",
+        "type":"Sensor",
+        "group": "Spirit",
+        "subgroup" :"Allison Acres",
+        "sprinkler"     :"Sprinkler2"     
+    },
+    {
+        "name" : "Soil Sensor8",
+        "type":"Sensor",
+        "group": "Spirit",
+        "subgroup" :"Allison Acres",
+        "sprinkler"     :"Sprinkler2"        
+    },
+    {
+        "name" : "Soil Sensor9",
+        "type":"Sensor",
+        "group": "Spirit",
+        "subgroup" :"Allison Acres",
+        "sprinkler"     :"Sprinkler2"         
+    },
+    {
+        "name" : "Soil Sensor10",
+        "type":"Sensor",
+        "group": "Spirit",
+        "subgroup" :"Allison Acres",
+        "sprinkler"     :"Sprinkler2"        
+    },
+
+    {
+        "name" : "Soil Sensor11",
+        "type":"Sensor",
+        "group": "Ryanair",
+        "subgroup" :"Baker Acres",
+        "sprinkler"     :"Sprinkler3"   
+    },
+    {
+        "name" : "Soil Sensor12",
+        "type":"Sensor",
+        "group": "Ryanair",
+        "subgroup" :"Baker Acres",
+        "sprinkler"     :"Sprinkler3"    
+    },
+    {
+        "name" : "Soil Sensor13",
+        "type":"Sensor",
+        "group": "Ryanair",
+        "subgroup" :"Baker Acres",
+        "sprinkler"     :"Sprinkler3"          
+    },
+    {
+        "name" : "Soil Sensor14",
+        "type":"Sensor",
+        "group": "Ryanair",
+        "subgroup" :"Baker Acres",
+        "sprinkler"     :"Sprinkler3"         
+    },
+    {
+        "name" : "Soil Sensor15",
+        "type":"Sensor",
+        "group": "Ryanair",
+        "subgroup" :"Baker Acres",
+        "sprinkler"     :"Sprinkler3"         
+    },
+
+    {
+        "name" : "Soil Sensor16",
+        "type":"Sensor",
+        "group": "Ryanair",
+        "subgroup" :"Ideal Place",
+        "sprinkler"     :"Sprinkler4"   
+    },
+    {
+        "name" : "Soil Sensor17",
+        "type":"Sensor",
+        "group": "Ryanair",
+        "subgroup" :"Ideal Place",
+        "sprinkler"     :"Sprinkler4"    
+    },
+    {
+        "name" : "Soil Sensor18",
+        "type":"Sensor",
+        "group": "Ryanair",
+        "subgroup" :"Ideal Place",
+        "sprinkler"     :"Sprinkler4"          
+    },
+    {
+        "name" : "Soil Sensor19",
+        "type":"Sensor",
+        "group": "Ryanair",
+        "subgroup" :"Ideal Place",
+        "sprinkler"     :"Sprinkler5"         
+    },
+    {
+        "name" : "Soil Sensor20",
+        "type":"Sensor",
+        "group": "Ryanair",
+        "subgroup" :"Ideal Place",
+        "sprinkler"     :"Sprinkler5"         
+    }
+]

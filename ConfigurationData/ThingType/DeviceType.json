@@ -1,0 +1,10 @@
+[
+    {
+        "typeName": "Sensor",
+        "typeDescription":"This is sensor type"       
+    },
+    {
+        "typeName": "Sprinkler",
+        "typeDescription":"This is sprinkler type"       
+    }
+]

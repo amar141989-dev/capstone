@@ -1,0 +1,37 @@
+[
+    {
+        
+        "name" : "Sprinkler1",
+        "type":"Sprinkler",
+        "group": "Spirit",
+        "subgroup" :"Ashley Farm" 
+    },
+    {
+        
+        "name" : "Sprinkler2",
+        "type":"Sprinkler",
+        "group": "Spirit",
+        "subgroup" :"Allison Acres" 
+    },
+    {
+        
+        "name" : "Sprinkler3",
+        "type":"Sprinkler",
+        "group": "Ryanair",
+        "subgroup" :"Baker Acres" 
+    },
+    {
+        
+        "name" : "Sprinkler4",
+        "type":"Sprinkler",
+        "group": "Ryanair",
+        "subgroup" :"Ideal Place" 
+    },
+    {
+        
+        "name" : "Sprinkler5",
+        "type":"Sprinkler",
+        "group": "Ryanair",
+        "subgroup" :"Ideal Place" 
+    }
+]
