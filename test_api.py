@@ -24,6 +24,8 @@ from database import Database
 ach=AwsCloudHelper("")
 db=Database()
 
+#region Thing Type 
+# Thing types are nothing but Sensors, Sprinklers
 # resultThingType=ach.get_thing_type_list("");
 # print("Type list: ",resultThingType)
 
@@ -31,12 +33,19 @@ db=Database()
 # print("Thing type: ", str(resultType))
 # #print(ach.get_thing_type_list("test_type"))
 
+#endregion
+
+#region Thing 
+# Individual Device. Like Soil Sensor 1, Sprinkler 1
 # resultThingList=ach.get_thing_list("","SoilSensor");
 # print("Thing list: ",resultThingList)
 
 # resultThng= ach.create_thing("thing1","test_type")
 # print("Thing with type: ", str(resultThng))
+#endregion
 
+#region Thing Group
+# Thing Group means whether where Things are deployed. Farm Name 
 # resultThngGrp=ach.get_thing_group("SubTestGroup1","TestGroup")
 # print("Thing grp: ", resultThngGrp)
 
@@ -49,6 +58,12 @@ db=Database()
 
 # resultSubGrp2 = ach.create_thing_group("SubTestGroup2","TestDesc","TestGroup")
 # print("Subgroup: ", resultSubGrp2)
+
+#endregion
+
+
+
+#region Thing Certificates
 
 # resultCert = ach.create_keys_and_certficate("thing")
 # print("Cert: ", resultCert)
@@ -65,6 +80,8 @@ db=Database()
 # f= open('./Certificates/' +thing + '_public.pem.key',"w+")
 # f.write(resultCert["keyPair"]["PublicKey"])
 # f.close()
+
+#endregion
 
 # resultPolicies = ach.list_policies()
 # print("Policy: ", resultPolicies)
@@ -97,7 +114,7 @@ try:
 
     # thing_sub_group="Farm1"
     # thing_sub_group_desc="Farm1 description"
-    # ach.create_thing_group(thing_sub_group, thing_sub_group_desc, thing_group)
+    # ach.create_thing_group(thin   g_sub_group, thing_sub_group_desc, thing_group)
     # print("4")
 
     # thing_policy="DevicePolicy"
