@@ -1,6 +1,7 @@
 from sys import dont_write_bytecode
 import boto3
 import os
+import requests
 
 class AwsCloudHelper:
 
@@ -36,18 +37,18 @@ class AwsCloudHelper:
         
         return result
 
-    def create_thing_group(self, group_name, group_description, parent_group_name, lat, long):
+    def create_thing_group(self, group_name, group_description, parent_group_name, lat, lng):
         response = None
         tag_list=[]
 
         if len(group_name)==0:
             raise Exception("Please specify the group name.")
 
-        if len(lat)==0 or len(long)==0:
+        if len(lat)==0 or len(lng)==0:
             raise Exception("Please specify the lat and long")
 
         tag_list.append({'Key': 'lat','Value': '' + lat + ''})
-        tag_list.append({'Key': 'long','Value': '' + long + ''})
+        tag_list.append({'Key': 'lng','Value': '' + lng + ''})
         
         if(parent_group_name is None or len(parent_group_name)==0):
            response = self.iot_client.create_thing_group(
@@ -174,7 +175,7 @@ class AwsCloudHelper:
     
 
     #Parameters details are case sensitive 
-    def create_rule(self, rule_name, rule_desc, table_name, topic_name):
+    def create_rule(self, rule_name, rule_desc, table_name, topic_name, role_arn):
         response = self.iot_client.create_topic_rule(
             ruleName=rule_name,
             topicRulePayload={
@@ -183,7 +184,7 @@ class AwsCloudHelper:
                 'actions': [
                     {
                         'dynamoDBv2': {
-                            'roleArn': 'arn:aws:iam::221389831253:role/service-role/BSM_Dynamo_Role',
+                            'roleArn': role_arn,
                             'putItem': {
                                 'tableName': table_name
                             }
@@ -242,15 +243,72 @@ class AwsCloudHelper:
         return response
     
     def get_farm_tags_by_thing(self, thing_name):
+        response = self.iot_client.describe_thing(
+                thingName=thing_name
+            )
+        tags=response["attributes"]
         response = self.iot_client.list_thing_groups_for_thing(
                     thingName=thing_name
                  )
-
+        
         if len(response["thingGroups"])>0:
-            locRes = self.iot_client.list_tags_for_resource(
-                        resourceArn=response["thingGroups"][0]["groupArn"]
-                    )
-            
-            return locRes["tags"]
+            tags["Farm"]=response["thingGroups"][0]["groupName"]
+            locRes = self.get_resource_tags(response["thingGroups"][0]["groupArn"])
+            tags.update(locRes) 
+        
+        
+        tags["host"]="a3vifb8zgia71f-ats.iot.us-east-2.amazonaws.com"
+        tags["rootCAPath"]="./Certificates/AmazonRootCA1.pem"
+        tags["certificatePath"]="./Certificates/" +thing_name + "_certificate.pem.crt"
+        tags["privateKeyPath"]="./Certificates/" +thing_name + "_public.pem.key"
+        tags["port"]= 8883
+        tags["topic"]= "iot/soilsensor"
+        tags["deviceId"]=thing_name
 
-        return None
+        response = self.iot_client.describe_endpoint()
+        tags["host"]=response["endpointAddress"]
+
+        return tags
+
+    def get_resource_tags(self, arn):
+        locRes = self.iot_client.list_tags_for_resource(
+                        resourceArn=arn
+                    )
+        response={}
+        for key in locRes["tags"]:
+            response[key["Key"]]=key["Value"]
+
+        return response
+
+    def download_root_ca_if_not_exists(self):
+        rootCaPath='./Certificates/AmazonRootCA1.pem'
+        if not os.path.isfile(rootCaPath):
+            if not os.path.exists(os.path.dirname(rootCaPath)):
+                try:
+                    os.makedirs(os.path.dirname(rootCaPath))
+                except OSError as exc: # Guard against race condition
+                    if exc.errno != errno.EEXIST:
+                        raise
+            rootCaUrl = 'https://www.amazontrust.com/repository/AmazonRootCA1.pem'
+            r = requests.get(rootCaUrl, allow_redirects=True)
+            f= open(rootCaPath,"wb")
+            f.write(r.content)
+            f.close()
+    
+    def attach_device_to_thing(self, thing_name, thing_type, device_name):
+        response = self.iot_client.create_thing(
+            thingName=thing_name,
+            thingTypeName=thing_type,
+            attributePayload={
+                'attributes': {
+                    'sprinkler': device_name
+                },
+                'merge': True
+            }
+        )
+        result={}
+        result['thingName']=response['thingName']
+        result['thingArn']=response['thingArn']
+        result['thingId']=response['thingId']
+        
+        return result
