@@ -265,6 +265,9 @@ class AwsCloudHelper:
         tags["topic"]= "iot/soilsensor"
         tags["deviceId"]=thing_name
 
+        response = self.iot_client.describe_endpoint()
+        tags["host"]=response["endpointAddress"]
+
         return tags
 
     def get_resource_tags(self, arn):
