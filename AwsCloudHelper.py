@@ -327,7 +327,8 @@ class AwsCloudHelper:
         tags["topic"]= constants.topic_name
         tags["deviceId"]=thing_name
 
-        response = self.iot_client.describe_endpoint()
+        response = self.iot_client.describe_endpoint(endpointType="iot:Data-ATS")
+        
         tags["host"]=response["endpointAddress"]
 
         groupDetail = self.get_group_details(tags["Farm"])
