@@ -2,6 +2,8 @@ import logging
 from AWSIoTPythonSDK.MQTTLib import AWSIoTMQTTClient
 from AWSIoTPythonSDK.exception.AWSIoTExceptions import publishTimeoutException
 from AWSIoTPythonSDK.core.protocol.internal.defaults import DEFAULT_OPERATION_TIMEOUT_SEC
+from botocore.exceptions import ClientError
+
 
 class AWSClient:
 
@@ -33,8 +35,13 @@ class AWSClient:
         return myAWSIoTMQTTClient
 
     def publish(self,messageJson,Qos):
-        self.AWSMQTTClient.connect()
-        self.AWSMQTTClient.publish(self.topic, messageJson, 1)
+        try:
+
+            self.AWSMQTTClient.connect()
+            self.AWSMQTTClient.publish(self.topic, messageJson, 1)
+        except ClientError as e:
+            print("Publsh failed Message {0}".format(messageJson))
+            print("Unexpected error: %s" % e) 
 
     def subscribe(self,Qos,customCallback):
         self.AWSMQTTClient.connect()

@@ -7,7 +7,7 @@ from InvokeSensorSimulator import InvokeSensorSimulator
 
 #Cleanup Script
 dCleanUp=CleanUpScript()
-dCleanUp.startClenUp()
+# dCleanUp.startClenUp()
 
 
 #Below code will start device configuration
@@ -25,7 +25,7 @@ cTable.startTableCreation()
 #Note down arn 
 #Create Rule for Inserting Data in DynamoDB Table
 ruleCreator=RuleCreator()
-# ruleCreator.createRuleToPushRecordInDynamoDB()
+ruleCreator.createRuleToPushRecordInDynamoDB()
 
 #Download the root CA certificates
 

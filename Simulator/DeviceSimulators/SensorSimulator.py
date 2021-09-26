@@ -13,6 +13,7 @@ import json
 import random
 import pathlib
 from AwsCloudHelper import AwsCloudHelper
+from botocore.exceptions import ClientError
 
 import constants
 
@@ -44,36 +45,42 @@ class SensorSimulator:
         next_trigger = self.__get_next_time(-1)
         humidity, temperature = (0,0)
         
+        absPath = os.path.abspath(constants.absolute_certificate_path)
         for sensor in self.allSensorsWithCert:
-            message = {}
-            host=sensor['host']
-            rootCAPath=os.path.join(constants.absolute_certificate_path, sensor['rootCAPath'])
-            certificatePath=os.path.join(constants.absolute_certificate_path, sensor['certificatePath'])
-            privateKeyPath=os.path.join(constants.absolute_certificate_path, sensor['privateKeyPath'])
-            port=sensor['port']
-            clientId=sensor['clientId']
-            topic=sensor['topic']
-            client = AWSClient(host, rootCAPath, certificatePath, privateKeyPath, port, clientId, topic)
-            message['deviceId'] = sensor['deviceId']
-            message['lat'] = sensor['lat']
-            message['lng'] = sensor['lng']
-            message['devicetimestamp']=str(datetime.now(timezone.utc))
+            try:
+                message = {}
+                host=sensor['host']
+                rootCAPath=os.path.join(absPath, sensor['rootCAPath'])
+                certificatePath=os.path.join(absPath, sensor['certificatePath'])
+                privateKeyPath=os.path.join(absPath, sensor['privateKeyPath'])
+                port=sensor['port']
+                clientId=sensor['clientId']
+                topic=sensor['topic']
+                client = AWSClient(host, rootCAPath, certificatePath, privateKeyPath, port, clientId, topic)
+                message['deviceId'] = sensor['deviceId']
+                message['lat'] = sensor['lat']
+                message['lng'] = sensor['lng']
+                message['devicetimestamp']=str(datetime.now(timezone.utc))
 
-            #Get new temp and humidty data in every 15 minutes
-            #otherwise fail for rate limiting 
-            if next_trigger<datetime.now():
-                humidity,temperature = OWP.get_humidity_temp(float(message['lat']), float(message['lng']))
-                next_trigger = self.__get_next_time(15)
+                #Get new temp and humidty data in every 15 minutes
+                #otherwise fail for rate limiting 
+                if next_trigger<datetime.now():
+                    humidity,temperature = OWP.get_humidity_temp(float(message['lat']), float(message['lng']))
+                    next_trigger = self.__get_next_time(15)
 
-            message['humidity'] = humidity
-            message['moisture'] = float(random.normalvariate(99, 1.5))
-            message['temperature'] = temperature
-            message['sprinkler'] = sensor['sprinkler']
-            message['farm'] = sensor['Farm']
-            messageJson = json.dumps(message)
-            client.topic
-            client.publish(messageJson,1)
-            print('Published topic %s: %s\n' % (client.topic, message))
+                message['humidity'] = humidity
+                message['moisture'] = float(random.normalvariate(99, 1.5))
+                message['temperature'] = temperature
+                message['sprinkler'] = sensor['sprinkler']
+                message['farm'] = sensor['Farm']
+                messageJson = json.dumps(message)
+                client.topic
+                client.publish(messageJson,1)
+                print('Published topic %s: %s\n' % (client.topic, message))
+
+            except ClientError as e:
+                print("Publsh failed Message {0}".format(message))
+                print("Unexpected error: %s" % e)
 
     def startSimulation(self):
         schedule.every(4).seconds.do(self.__startsensors)

@@ -14,7 +14,7 @@ role_arn='arn:aws:iam::055670542642:role/Capstone_DynDB'
 rule_name='CapstoneDynamoRule'
 rule_desc="Insert into dynamo using field split method"
 
-absolute_certificate_path="D:/Projects/personal/capstone/capstone/Certificates/"
+absolute_certificate_path="./Certificates/"
 
 aws_ca_root="https://www.amazontrust.com/repository/AmazonRootCA1.pem"
 

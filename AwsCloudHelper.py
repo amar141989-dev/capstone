@@ -348,7 +348,9 @@ class AwsCloudHelper:
         return response
 
     def download_root_ca_if_not_exists(self):
-        rootCaPath=os.path.join(constants.absolute_certificate_path,'AmazonRootCA1.pem')
+        absPath = os.path.abspath(constants.absolute_certificate_path)
+
+        rootCaPath=os.path.join(absPath,'AmazonRootCA1.pem')
         if not os.path.isfile(rootCaPath):
             if not os.path.exists(os.path.dirname(rootCaPath)):
                 try:
