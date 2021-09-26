@@ -46,3 +46,6 @@ class AWSClient:
     def subscribe(self,Qos,customCallback):
         self.AWSMQTTClient.connect()
         self.AWSMQTTClient.subscribe(self.topic, Qos, customCallback)
+
+    def disconnectClient(self):
+        self.AWSMQTTClient.disconnect()

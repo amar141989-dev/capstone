@@ -44,7 +44,6 @@ class SensorSimulator:
         OWP = OpenWeatherMap(constants.weather_api_key)
         next_trigger = self.__get_next_time(-1)
         humidity, temperature = (0,0)
-        
         absPath = os.path.abspath(constants.absolute_certificate_path)
         for sensor in self.allSensorsWithCert:
             try:
@@ -77,13 +76,16 @@ class SensorSimulator:
                 client.topic
                 client.publish(messageJson,1)
                 print('Published topic %s: %s\n' % (client.topic, message))
+                client.disconnectClient()
+                time.sleep(5)
 
             except ClientError as e:
                 print("Publsh failed Message {0}".format(message))
                 print("Unexpected error: %s" % e)
 
     def startSimulation(self):
-        schedule.every(4).seconds.do(self.__startsensors)
+        self.__startsensors()
+        schedule.every(300).seconds.do(self.__startsensors)
         while 1:
             schedule.run_pending()
             time.sleep(5)
