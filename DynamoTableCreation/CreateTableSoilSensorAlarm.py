@@ -11,6 +11,7 @@ import time
 import sched
 
 import boto3
+from botocore import endpoint
 from botocore.config import Config
 
 ACCESS_KEY = 'type here access key'
@@ -28,26 +29,26 @@ my_config = Config(
 # Create a low-level client with the service name
 dynamodb = boto3.client('dynamodb', config=my_config, aws_access_key_id=ACCESS_KEY, aws_secret_access_key=SECRET_KEY)
 
-# Creat table weather_data
-weather_table = dynamodb.create_table(
-    TableName='weather_data',
+# Creat table soil_sensor_alarm
+soil_sensor_alarm_table = dynamodb.create_table(
+    TableName='soil_sensor_alarm',
     AttributeDefinitions=[
         {
-            'AttributeName': 'latitude',
+            'AttributeName': 'deviceid',
             'AttributeType': 'S'
         },
         {
-            'AttributeName': 'longitude',
+            'AttributeName': 'alarm',
             'AttributeType': 'S'
         }
     ],
     KeySchema=[
         {
-            'AttributeName': 'latitude',
+            'AttributeName': 'deviceid',
             'KeyType': 'HASH'
         },
         {
-            'AttributeName': 'longitude',
+            'AttributeName': 'alarm',
             'KeyType': 'RANGE'
         }     
     ],
@@ -58,4 +59,4 @@ weather_table = dynamodb.create_table(
 )
 
 # Wait until the table exists.
-weather_table.meta.client.get_waiter('table_exists').wait(TableName='weather_data')
+soil_sensor_alarm_table.meta.client.get_waiter('table_exists').wait(TableName='soil_sensor_alarm')

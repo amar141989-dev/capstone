@@ -1,21 +1,20 @@
+from TableCreation import TableCreation
 from DeviceConfiguration import DeviceConfiguration
+from DynamoTableCreation.CreateDynamoTables import CreateDynamoTables
+from CleanUpScript import CleanUpScript
 
-#start device configuration.
-print("Device Configuration Started")
-
-dconfig=DeviceConfiguration()
-
-dconfig.createThingType()
-
-dconfig.createThingGroup()
-
-dconfig.createThingSubGroup()
-
-dconfig.createPolicy()
-
-dconfig.createSprinklers()
-
-dconfig.createSensors()
+#Cleanup Script
+dCleanUp=CleanUpScript()
+dCleanUp.startClenUp()
 
 
-print("Device Configuration completed")
+#Below code will start device configuration
+# dconfig=DeviceConfiguration()
+# dconfig.startDeviceConfiguration()
+
+
+#This will create required dynamoDb tables
+cTable=TableCreation()
+cTable.startTableCreation()
+
+

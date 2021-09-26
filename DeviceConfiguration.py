@@ -93,6 +93,23 @@ class DeviceConfiguration:
     def printLog(self, message):
         print(message)
 
+    def startDeviceConfiguration(self):
+        print("Device Configuration Started")
+
+        self.createThingType()
+
+        self.createThingGroup()
+
+        self.createThingSubGroup()
+
+        self.createPolicy()
+
+        self.createSprinklers()
+
+        self.createSensors()
+
+        print("Device Configuration completed")
+
 
 # Create Thing Sub Group (Farm Details)
 # Create Thing Policy 
