@@ -7,7 +7,7 @@ from InvokeSensorSimulator import InvokeSensorSimulator
 
 #Cleanup Script
 dCleanUp=CleanUpScript()
-# dCleanUp.startClenUp()
+dCleanUp.startClenUp()
 
 
 #Below code will start device configuration
@@ -17,7 +17,7 @@ dconfig.downloadRootCa()
 
 #This will create required dynamoDb tables
 cTable=TableCreation()
-# cTable.startTableCreation()
+cTable.startTableCreation()
 
 
 #Create IOT type role

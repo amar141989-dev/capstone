@@ -124,21 +124,21 @@ class CreateDynamoTables:
             TableName=self.soil_sensor_data_alarmTableName,
             AttributeDefinitions=[
                 {
-                    'AttributeName': 'deviceid',
+                    'AttributeName': 'deviceId',
                     'AttributeType': 'S'
                 },
                 {
-                    'AttributeName': 'timestamp',
+                    'AttributeName': 'devicetimestamp',
                     'AttributeType': 'S'
                 }
             ],
             KeySchema=[
                 {
-                    'AttributeName': 'deviceid',
+                    'AttributeName': 'deviceId',
                     'KeyType': 'HASH'
                 },
                 {
-                    'AttributeName': 'timestamp',
+                    'AttributeName': 'devicetimestamp',
                     'KeyType': 'RANGE'
                 }     
             ],

@@ -147,8 +147,8 @@ db=Database()
 
 # print("\n\n",res)
 
-import pathlib
-import constants 
+# import pathlib
+# import constants 
 
-print(os.path.join(constants.absolute_certificate_path,"text.txt"))
-open(os.path.join(constants.absolute_certificate_path,"text.txt"),"w+").close()
+# print(os.path.join(constants.absolute_certificate_path,"text.txt"))
+# open(os.path.join(constants.absolute_certificate_path,"text.txt"),"w+").close()
