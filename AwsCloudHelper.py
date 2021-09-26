@@ -3,12 +3,13 @@ import boto3
 import os
 import requests
 from botocore.exceptions import ClientError
+import constants
 
 class AwsCloudHelper:
 
     def __init__(self, region_name):
         if region_name is None or len(region_name)==0:
-            self.iot_client = boto3.client('iot',region_name ='us-east-1')
+            self.iot_client = boto3.client('iot',region_name =constants.region_name)
         else:
             self.iot_client = boto3.client('iot',region_name)
 
@@ -215,6 +216,7 @@ class AwsCloudHelper:
 
     #Parameters details are case sensitive 
     def create_rule(self, rule_name, rule_desc, table_name, topic_name, role_arn):
+
         response = self.iot_client.create_topic_rule(
             ruleName=rule_name,
             topicRulePayload={
@@ -315,12 +317,11 @@ class AwsCloudHelper:
             tags.update(locRes) 
         
         
-        tags["host"]="a3vifb8zgia71f-ats.iot.us-east-2.amazonaws.com"
-        tags["rootCAPath"]="./Certificates/AmazonRootCA1.pem"
-        tags["certificatePath"]="./Certificates/" +thing_name + "_certificate.pem.crt"
-        tags["privateKeyPath"]="./Certificates/" +thing_name + "_public.pem.key"
-        tags["port"]= 8883
-        tags["topic"]= "iot/soilsensor"
+        tags["rootCAPath"]="../../Certificates/AmazonRootCA1.pem"
+        tags["certificatePath"]="../../Certificates/" +thing_name + "_certificate.pem.crt"
+        tags["privateKeyPath"]="../../Certificates/" +thing_name + "_public.pem.key"
+        tags["port"]= constants.port
+        tags["topic"]= constants.topic_name
         tags["deviceId"]=thing_name
 
         response = self.iot_client.describe_endpoint()

@@ -120,6 +120,13 @@ db=Database()
 #     print(e)
 
 #ach.download_root_ca_if_not_exists()
-#print(ach.get_thing_list("",""))
+# print(ach.get_thing_list("","Sensor"))
+allSensors =ach.get_thing_list("","Sensor")
+allSensorsWithCert=[]
+for sensor in allSensors:
+    sensorWIthCA = ach.get_farm_tags_by_thing(sensor["thingName"])
+    allSensorsWithCert.append(sensorWIthCA)
+
+print(allSensorsWithCert)
 # print(ach.get_farm_tags_by_thing("thing1"))
-print (ach.attach_device_to_thing("SoilSensor1","Sensor","Sprinkler1"))
+# print (ach.attach_device_to_thing("SoilSensor1","Sensor","Sprinkler1"))

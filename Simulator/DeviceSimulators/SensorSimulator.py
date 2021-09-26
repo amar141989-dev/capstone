@@ -4,20 +4,32 @@ from datetime import time
 from datetime import timezone
 
 from os.path import abspath
-from DeviceSimulators.OpenWeatherMap import OpenWeatherMap
-from Client.AWSClient import AWSClient
+from OpenWeatherMap import OpenWeatherMap
+from Simulator.Client.AWSClient import AWSClient
 
 import schedule
 import json
 import random
+from AwsCloudHelper import AwsCloudHelper
+
+import constants
 
 class SensorSimulator:
 
     def __init__(self):
+        self.ach=AwsCloudHelper("")
+
         pass
 
     def __getsensors(self):
-        return  json.load(open(abspath('E:/2021/AgriTech/capstone/Simulator/DataSource/Sensors.json')))
+        allSensors =self.ach.get_thing_list("","Sensor")
+        allSensorsWithCert=[]
+        for sensor in allSensors:
+            sensorWIthCA = self.ach.get_farm_tags_by_thing(sensor["thingName"])
+            allSensorsWithCert.append(sensorWIthCA)
+
+        print("Avaialble sensor count is {0}", len(allSensorsWithCert))
+        return  allSensorsWithCert
 
     def __get_next_time(self, interval_minutes):
         future_trigger_time = datetime.now() + timedelta(minutes=interval_minutes)
@@ -26,7 +38,7 @@ class SensorSimulator:
     def __startsensors(self):
         #get sensors
         sensors = self.__getsensors()
-        OWP = OpenWeatherMap('151520a1bd651a75d263279a010f0baa')
+        OWP = OpenWeatherMap(constants.weather_api_key)
         next_trigger = self.__get_next_time(-1)
         humidity, temperature = (0,0)
         while True:
@@ -35,13 +47,13 @@ class SensorSimulator:
                 client = AWSClient(sensor['host'],sensor['rootCAPath'],sensor['certificatePath'],sensor['privateKeyPath'],sensor['port'],sensor['clientId'],sensor['topic'])
                 message['deviceId'] = sensor['deviceId']
                 message['lat'] = sensor['lat']
-                message['lon'] = sensor['lon']
+                message['lng'] = sensor['lng']
                 message['devicetimestamp']=str(datetime.datetime.now(timezone.utc))
 
                 #Get new temp and humidty data in every 15 minutes
                 #otherwise fail for rate limiting 
                 if next_trigger<datetime.now():
-                    humidity,temperature = OWP.get_humidity_temp(message['lat'],message['lon'])
+                    humidity,temperature = OWP.get_humidity_temp(message['lat'],message['lng'])
                     next_trigger = self.__get_next_time(15)
 
                 message['humidity'] = humidity

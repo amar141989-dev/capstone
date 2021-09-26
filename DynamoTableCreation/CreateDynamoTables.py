@@ -16,14 +16,15 @@ import boto3
 
 from boto3 import Session
 from botocore.config import Config
+import constants
 
 class CreateDynamoTables:
     def __init__(self):
         
-        self.weather_dataTableName='weather_data'
-        self.soil_sensor_alarmTableName='soil_sensor_alarm'
-        self.soil_sensor_data_alarmTableName='soil_sensor_data'
-        self.sprinkler_switch_alarmTableName='sprinkler_switch'
+        self.weather_dataTableName=constants.weather_dataTableName
+        self.soil_sensor_alarmTableName=constants.soil_sensor_alarmTableName
+        self.soil_sensor_data_alarmTableName=constants.soil_sensor_data_alarmTableName
+        self.sprinkler_switch_alarmTableName=constants.sprinkler_switch_alarmTableName
 
         # Create a low-level client with the service name
         self.dynamodb = boto3.resource('dynamodb')

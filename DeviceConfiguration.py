@@ -59,7 +59,7 @@ class DeviceConfiguration:
         thingSubGroups = self.__getThingSubGroups()
 
         for tSubGroup in thingSubGroups:
-            self.ach.create_thing_group(tSubGroup["subgroupName"],tSubGroup["groupDescription"],tSubGroup["groupName"],tSubGroup["lat"],tSubGroup["long"])                    
+            self.ach.create_thing_group(tSubGroup["subgroupName"],tSubGroup["groupDescription"],tSubGroup["groupName"],tSubGroup["lat"],tSubGroup["lng"])                    
             txt = "Thing sub group created {0} in group {1} ".format(tSubGroup["subgroupName"],tSubGroup["groupName"])
             self.printLog(txt)
 

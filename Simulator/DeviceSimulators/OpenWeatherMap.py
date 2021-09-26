@@ -1,12 +1,12 @@
 import sys
 from pyowm import OWM
-
+import constants
 class OpenWeatherMap:
 
     def __init__(self, secret_key):
         owm=None
         if secret_key is None or len(secret_key) == 0:
-            owm = OWM('151520a1bd651a75d263279a010f0baa')
+            owm = OWM(constants.weather_api_key)
         else:
             owm=OWM(secret_key)
 
