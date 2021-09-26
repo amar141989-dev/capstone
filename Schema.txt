@@ -48,7 +48,8 @@ thing:
 }
 
 sensor_data{
-    thing_name:thing_0
+    device:thing_0
+
     soil_moisture:100
     humidity:100
     temperature:30

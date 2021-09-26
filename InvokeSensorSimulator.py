@@ -3,7 +3,7 @@ class InvokeSensorSimulator:
     def __init__(self) :
         pass
 
-    def StartPushingSesorData(self):
+    def StartPushingSensorData(self):
         print("Sensor Simulation Started")
         sensorSimulator=SensorSimulator()
         sensorSimulator.startSimulation()

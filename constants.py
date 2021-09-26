@@ -8,10 +8,14 @@ port=8883
 region_name ='us-east-1'
 
 role_name='CapstoneEC2Role'
-role_arn='arn:aws:iam::055670542642:role/CapstoneEC2Role'
+#role_arn='arn:aws:iam::055670542642:role/CapstoneEC2Role'
+role_arn='arn:aws:iam::055670542642:role/Capstone_DynDB'
 
-rule_name='dynamoInsert'
-rule_desc="Insert into dynamo using field split"
+rule_name='CapstoneDynamoRule'
+rule_desc="Insert into dynamo using field split method"
 
+absolute_certificate_path="D:/Projects/personal/capstone/capstone/Certificates/"
+
+aws_ca_root="https://www.amazontrust.com/repository/AmazonRootCA1.pem"
 
 weather_api_key='151520a1bd651a75d263279a010f0baa'

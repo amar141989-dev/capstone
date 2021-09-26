@@ -18,6 +18,8 @@
 #---------------Open Weather Map API --End ----------------------------
 
 #---------------AWS API --Start ----------------------------
+import os
+import re
 from AwsCloudHelper import AwsCloudHelper
 from database import Database
 
@@ -120,13 +122,33 @@ db=Database()
 #     print(e)
 
 #ach.download_root_ca_if_not_exists()
-# print(ach.get_thing_list("","Sensor"))
-allSensors =ach.get_thing_list("","Sensor")
-allSensorsWithCert=[]
-for sensor in allSensors:
-    sensorWIthCA = ach.get_farm_tags_by_thing(sensor["thingName"])
-    allSensorsWithCert.append(sensorWIthCA)
+# # print(ach.get_thing_list("","Sensor"))
+# allSensors =ach.get_thing_list("","Sensor")
+# allSensorsWithCert=[]
+# for sensor in allSensors:
+#     sensorWIthCA = ach.get_farm_tags_by_thing(sensor["thingName"])
+#     allSensorsWithCert.append(sensorWIthCA)
 
-print(allSensorsWithCert)
+# print(allSensorsWithCert)
 # print(ach.get_farm_tags_by_thing("thing1"))
 # print (ach.attach_device_to_thing("SoilSensor1","Sensor","Sprinkler1"))
+
+# response=ach.get_group_details("IdealPlace")
+# print(response)
+# print("\n\n",response['thingGroupMetadata'])
+
+# res={}
+# res["groupName"]=response['thingGroupName']
+# res["groupArn"]=response['thingGroupArn']
+
+# if 'rootToParentThingGroups' in response['thingGroupMetadata']: 
+#     res["parentGroupName"]=response['thingGroupMetadata']['rootToParentThingGroups'][0]['groupName']
+#     res["parentGroupArn"]=response['thingGroupMetadata']['rootToParentThingGroups'][0]['groupArn']
+
+# print("\n\n",res)
+
+import pathlib
+import constants 
+
+print(os.path.join(constants.absolute_certificate_path,"text.txt"))
+open(os.path.join(constants.absolute_certificate_path,"text.txt"),"w+").close()

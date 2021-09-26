@@ -246,9 +246,9 @@ class AwsCloudHelper:
         response=self.get_thing_type_list(thing_type)
 
         #create directory fro certificates
-        if not os.path.exists(os.path.dirname("./Certificates/")):
+        if not os.path.exists(os.path.dirname(constants.absolute_certificate_path)):
             try:
-                os.makedirs(os.path.dirname("./Certificates/"))
+                os.makedirs(os.path.dirname(constants.absolute_certificate_path))
                 print("Certificate directory created")
             except OSError as exc: # Guard against race condition
                 if exc.errno != errno.EEXIST:
@@ -284,15 +284,18 @@ class AwsCloudHelper:
         self.add_thing_to_thing_group(response["thingArn"],group_arn)
 
         resultCert = self.create_keys_and_certficate(thing_name)
-        f= open('./Certificates/' +thing_name + '_certificate.pem.crt',"w+")
+        filePath=os.path.join(constants.absolute_certificate_path, thing_name + '_certificate.pem.crt')
+        f= open(filePath,"w+")
         f.write(resultCert["certificatePem"])
         f.close()
 
-        f= open('./Certificates/' +thing_name + '_private.pem.key',"w+")
+        filePath=os.path.join(constants.absolute_certificate_path, thing_name + '_private.pem.key')
+        f= open(filePath,"w+")
         f.write(resultCert["keyPair"]["PrivateKey"])
         f.close()
 
-        f= open('./Certificates/' +thing_name + '_public.pem.key',"w+")
+        filePath=os.path.join(constants.absolute_certificate_path, thing_name + '_public.pem.key')
+        f= open(filePath,"w+")
         f.write(resultCert["keyPair"]["PublicKey"])
         f.close()
         
@@ -317,9 +320,9 @@ class AwsCloudHelper:
             tags.update(locRes) 
         
         
-        tags["rootCAPath"]="../../Certificates/AmazonRootCA1.pem"
-        tags["certificatePath"]="../../Certificates/" +thing_name + "_certificate.pem.crt"
-        tags["privateKeyPath"]="../../Certificates/" +thing_name + "_public.pem.key"
+        tags["rootCAPath"]="AmazonRootCA1.pem"
+        tags["certificatePath"]=thing_name + "_certificate.pem.crt"
+        tags["privateKeyPath"]=thing_name + "_public.pem.key"
         tags["port"]= constants.port
         tags["topic"]= constants.topic_name
         tags["deviceId"]=thing_name
@@ -327,6 +330,10 @@ class AwsCloudHelper:
         response = self.iot_client.describe_endpoint()
         tags["host"]=response["endpointAddress"]
 
+        groupDetail = self.get_group_details(tags["Farm"])
+        if 'parentGroupName' in groupDetail:
+            tags["clientId"]=groupDetail["parentGroupName"]
+            
         return tags
 
     def get_resource_tags(self, arn):
@@ -340,7 +347,7 @@ class AwsCloudHelper:
         return response
 
     def download_root_ca_if_not_exists(self):
-        rootCaPath='./Certificates/AmazonRootCA1.pem'
+        rootCaPath=os.path.join(constants.absolute_certificate_path,'AmazonRootCA1.pem')
         if not os.path.isfile(rootCaPath):
             if not os.path.exists(os.path.dirname(rootCaPath)):
                 try:
@@ -348,8 +355,8 @@ class AwsCloudHelper:
                 except OSError as exc: # Guard against race condition
                     if exc.errno != errno.EEXIST:
                         raise
-            rootCaUrl = 'https://www.amazontrust.com/repository/AmazonRootCA1.pem'
-            r = requests.get(rootCaUrl, allow_redirects=True)
+            
+            r = requests.get(constants.aws_ca_root, allow_redirects=True)
             f= open(rootCaPath,"wb")
             f.write(r.content)
             f.close()
@@ -369,5 +376,17 @@ class AwsCloudHelper:
         result['thingName']=response['thingName']
         result['thingArn']=response['thingArn']
         result['thingId']=response['thingId']
+        
+        return result
+    
+    def get_group_details(self, group_name):
+        response = self.iot_client.describe_thing_group(thingGroupName=group_name)
+        result={}
+        result["groupName"]=response['thingGroupName']
+        result["groupArn"]=response['thingGroupArn']
+
+        if 'rootToParentThingGroups' in response['thingGroupMetadata']: 
+            result["parentGroupName"]=response['thingGroupMetadata']['rootToParentThingGroups'][0]['groupName']
+            result["parentGroupArn"]=response['thingGroupMetadata']['rootToParentThingGroups'][0]['groupArn']
         
         return result

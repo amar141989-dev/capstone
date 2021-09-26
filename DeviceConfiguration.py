@@ -93,6 +93,9 @@ class DeviceConfiguration:
     def printLog(self, message):
         print(message)
 
+    def downloadRootCa(self):
+        self.ach.download_root_ca_if_not_exists()
+    
     def startDeviceConfiguration(self):
         print("Device Configuration Started")
 
@@ -107,6 +110,8 @@ class DeviceConfiguration:
         self.createSprinklers()
 
         self.createSensors()
+
+        self.downloadRootCa()
 
         print("Device Configuration completed")
 
