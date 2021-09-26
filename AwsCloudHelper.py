@@ -322,7 +322,7 @@ class AwsCloudHelper:
         
         tags["rootCAPath"]="AmazonRootCA1.pem"
         tags["certificatePath"]=thing_name + "_certificate.pem.crt"
-        tags["privateKeyPath"]=thing_name + "_public.pem.key"
+        tags["privateKeyPath"]=thing_name + "_private.pem.key"
         tags["port"]= constants.port
         tags["topic"]= constants.topic_name
         tags["deviceId"]=thing_name
