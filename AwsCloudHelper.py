@@ -310,6 +310,8 @@ class AwsCloudHelper:
                 thingName=thing_name
             )
         tags=response["attributes"]
+        tags["deviceType"]=response["thingTypeName"]
+        
         response = self.iot_client.list_thing_groups_for_thing(
                     thingName=thing_name
                  )
@@ -393,3 +395,7 @@ class AwsCloudHelper:
             result["parentGroupArn"]=response['thingGroupMetadata']['rootToParentThingGroups'][0]['groupArn']
         
         return result
+    
+    def list_things_in_thing_group(self, group_name):
+        response = self.iot_client.list_things_in_thing_group(thingGroupName=group_name)
+        return response; 
