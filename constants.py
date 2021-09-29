@@ -7,9 +7,10 @@ topic_name ='iot/sensors'
 port=8883
 region_name ='us-east-1'
 
-role_name='CapstoneEC2Role'
-#role_arn='arn:aws:iam::055670542642:role/CapstoneEC2Role'
-role_arn='arn:aws:iam::055670542642:role/Capstone_DynDB'
+iot_role_name='capstoneIoTRole'
+iot_role_arn='arn:aws:iam::221389831253:role/capstoneIoTRole'
+# iot_role_arn='arn:aws:iam::055670542642:role/Capstone_DynDB'
+
 
 rule_name='CapstoneDynamoRule'
 rule_desc="Insert into dynamo using field split method"

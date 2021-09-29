@@ -1,4 +1,6 @@
+from re import S
 from sys import dont_write_bytecode
+from types import resolve_bases
 import boto3
 import os
 import requests
@@ -109,18 +111,46 @@ class AwsCloudHelper:
         return response
 
     def create_thing_type(self, type_name, type_desc):
-        response = self.iot_client.create_thing_type(
-                thingTypeName=type_name,
-                thingTypeProperties={
-                    'thingTypeDescription': type_desc
-                    }
-                )
-        result={}
-        result["thingTypeName"]=response["thingTypeName"]
-        result["thingTypeArn"]=response["thingTypeArn"]
-        result["thingTypeId"]=response["thingTypeId"]
+        try:
+            
+            response = self.iot_client.create_thing_type(
+                    thingTypeName=type_name,
+                    thingTypeProperties={
+                        'thingTypeDescription': type_desc
+                        }
+                    )
+            result={}
+            result["thingTypeName"]=response["thingTypeName"]
+            result["thingTypeArn"]=response["thingTypeArn"]
+            result["thingTypeId"]=response["thingTypeId"]
+
+        except ClientError as e:
+            if e.response['Error']['Code'] == 'ResourceAlreadyExistsException':
+                print("Thing type {0} already exists".format(type_name))
+
+                response=   self.get_thing_type(type_name)
+                print(response)
+                result={}
+                result["thingTypeName"] =response[0]["thingTypeName"]
+                result["thingTypeArn"]=response[0]["thingTypeArn"]
+
+            else:
+                print("Unexpected error: %s" % e)
+
        
         return result
+
+    def deleteAll_thing_type(self, type_name, type_desc):
+        try:
+            
+            response = self.iot_client.list_thing_types()
+            if len(response["thingTypes"])>0:
+                for thingType in response["things"]:
+                    self.iot_client.delete_thing_type(thingType["thingTypeName"])
+
+        except ClientError as e:
+            print("Unexpected error: %s" % e)
+
 
     def create_topic_rule(self):
         pass
@@ -141,6 +171,12 @@ class AwsCloudHelper:
             response = self.iot_client.list_thing_types(thingTypeName=thing_type_name)
 
         return response["thingTypes"]
+
+    def get_thing_type(self, thing_type_name):
+        response=None 
+        response = self.iot_client.list_thing_types(thingTypeName=thing_type_name)
+        return response["thingTypes"]
+
 
     def get_thing_list(self, thing_name, thing_type_name):
         response = None
@@ -215,7 +251,7 @@ class AwsCloudHelper:
     
 
     #Parameters details are case sensitive 
-    def create_rule(self, rule_name, rule_desc, table_name, topic_name, role_arn):
+    def create_rule(self, rule_name, rule_desc, table_name, topic_name, iot_role_arn):
 
         response = self.iot_client.create_topic_rule(
             ruleName=rule_name,
@@ -225,7 +261,7 @@ class AwsCloudHelper:
                 'actions': [
                     {
                         'dynamoDBv2': {
-                            'roleArn': role_arn,
+                            'roleArn': iot_role_arn,
                             'putItem': {
                                 'tableName': table_name
                             }

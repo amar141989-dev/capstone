@@ -114,9 +114,9 @@ db=Database()
 #     rule_desc="Insert into dynamo using field split"
 #     dynamo_table_name="thng"
 #     topic_name="iot/moisture"
-#     iam_role_arn="arn:aws:iam::221389831253:role/service-role/BSM_Dynamo_Role"
+#     iam_iot_role_arn="arn:aws:iam::221389831253:role/service-role/BSM_Dynamo_Role"
 
-#     resultRule=ach.create_rule(rule_name, rule_desc, dynamo_table_name, topic_name, iam_role_arn)
+#     resultRule=ach.create_rule(rule_name, rule_desc, dynamo_table_name, topic_name, iam_iot_role_arn)
 #     print("Result rule: ",resultRule)
 # except Exception as e:
 #     print(e)
