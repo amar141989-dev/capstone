@@ -4,7 +4,7 @@ from DynamoTableCreation.CreateDynamoTables import CreateDynamoTables
 from CleanUpScript import CleanUpScript
 from RuleCreator import RuleCreator
 from InvokeSensorSimulator import InvokeSensorSimulator
-
+from lamdaInvoker import LambdaInvoker 
 #Cleanup Script
 dCleanUp=CleanUpScript()
 # dCleanUp.startClenUp()
@@ -32,4 +32,25 @@ ruleCreator.createRuleToPushRecordInDynamoDB()
 
 #Push Data to Dynamo  table using simulator
 invokeSensorSimulator=InvokeSensorSimulator()
-invokeSensorSimulator.StartPushingSensorData()
+#invokeSensorSimulator.StartPushingSensorData()
+
+
+#create lambda function manually. Lambda Function Name :- sensorDataMonitor
+#event bridge creation needs permission. AWS educate account does not have permission.
+# Workaround for this is create python script to invoke python script
+#create event bridge rule with name  triggerSensorDataMonitor, this will trigger lambda fnction every 5 min.
+#trigger Name :- triggerSensorDataMonitor
+#trigger description : This will trigger lamda function every 5 min. 
+#schedule expression : rate(5 minutes)
+
+
+#alternate option for event bridge. 
+#create python script and execute it every five minutes
+
+callLambda =LambdaInvoker ()
+callLambda.callLamdaCron()
+
+#Run Sprinkler simulator to receive alerts to ON OFF sprinkler from Lamda 
+
+
+

@@ -20,3 +20,6 @@ absolute_certificate_path="./Certificates/"
 aws_ca_root="https://www.amazontrust.com/repository/AmazonRootCA1.pem"
 
 weather_api_key='151520a1bd651a75d263279a010f0baa'
+
+lambdaFunctionName= 'sensorDataMonitor'
+lamdaCronDurationInMinute=5

@@ -5,7 +5,7 @@ import datetime
 
 def lambda_handler(event, context):
     
-    iotclient = boto3.client('iot-data', region_name='us-east-2')
+    iotclient = boto3.client('iot-data', region_name='us-east-1')
     
     dynamodbclient = boto3.client('dynamodb')
     paginator = dynamodbclient.get_paginator('scan')
