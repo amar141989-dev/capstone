@@ -7,17 +7,17 @@ from InvokeSensorSimulator import InvokeSensorSimulator
 from lamdaInvoker import LambdaInvoker 
 #Cleanup Script
 dCleanUp=CleanUpScript()
-# dCleanUp.startClenUp()
+# # dCleanUp.startClenUp()
 
 
 #Below code will start device configuration
 dconfig=DeviceConfiguration()
-dconfig.startDeviceConfiguration()
-dconfig.downloadRootCa()
+# # dconfig.startDeviceConfiguration()
+# # dconfig.downloadRootCa()
 
 #This will create required dynamoDb tables
 cTable=TableCreation()
-cTable.startTableCreation()
+# # cTable.startTableCreation()
 
 
 #Create IOT type role manually.  (capstoneIoTRole)
@@ -25,14 +25,14 @@ cTable.startTableCreation()
 #Note down arn 
 #Create Rule for Inserting Data in DynamoDB Table
 ruleCreator=RuleCreator()
-ruleCreator.createRuleToPushRecordInDynamoDB()
+# # ruleCreator.createRuleToPushRecordInDynamoDB()
 
 #Download the root CA certificates
 
 
 #Push Data to Dynamo  table using simulator
 invokeSensorSimulator=InvokeSensorSimulator()
-#invokeSensorSimulator.StartPushingSensorData()
+# # invokeSensorSimulator.StartPushingSensorData()
 
 
 #create lambda function manually. Lambda Function Name :- sensorDataMonitor

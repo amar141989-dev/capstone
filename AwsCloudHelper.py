@@ -129,7 +129,7 @@ class AwsCloudHelper:
                 print("Thing type {0} already exists".format(type_name))
 
                 response=   self.get_thing_type(type_name)
-                print(response)
+                # print(response)
                 result={}
                 result["thingTypeName"] =response[0]["thingTypeName"]
                 result["thingTypeArn"]=response[0]["thingTypeArn"]

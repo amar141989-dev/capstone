@@ -10,11 +10,11 @@ def lambda_handler(event, context):
     dynamodbclient = boto3.client('dynamodb')
     paginator = dynamodbclient.get_paginator('scan')
     
-    time_change = datetime.timedelta(minutes=10)
+    time_change = datetime.timedelta(minutes=100)
     timerInterval = str(datetime.datetime.now(timezone.utc) - time_change)
     
     operation_parameters = {
-        'TableName': 'SoilSensorData',
+        'TableName': 'soil_sensor_data',
         'FilterExpression': 'humidity > :hum AND moisture > :moi AND temperature > :tem AND devicetimestamp > :deviceTs',
          'ExpressionAttributeValues': {
             ':hum': {'N': '50'},
@@ -28,8 +28,11 @@ def lambda_handler(event, context):
     
     for page in paginator.paginate(**operation_parameters):
         for item in page['Items']:
-            print(item)
-            sprinklers.append(item['sprinkler']['S'])
+            sprinklerName =item['sprinkler']['S']
+            if (sprinklerName not in sprinklers):
+                print ("Element Exists")
+                print(item)
+                sprinklers.append(sprinklerName)
             
     for sprinkler in set(sprinklers):
         response = iotclient.publish(topic='sprinkler/'+sprinkler,qos=1,payload=json.dumps({"Message":"Turn On"}))   
@@ -38,5 +41,5 @@ def lambda_handler(event, context):
     # TODO implement
     return {
         'statusCode': 200,
-        'body': json.dumps('Hello from Lambda!')
+        'body': json.dumps(sprinklers)
     }
