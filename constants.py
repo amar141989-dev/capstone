@@ -24,3 +24,5 @@ weather_api_key='151520a1bd651a75d263279a010f0baa'
 
 lambdaFunctionName= 'sensorDataMonitor'
 lamdaCronDurationInMinute=5
+
+since_n_minutes_for_health_check=60

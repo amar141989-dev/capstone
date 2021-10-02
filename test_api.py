@@ -21,6 +21,7 @@
 import os
 import re
 from AwsCloudHelper import AwsCloudHelper
+from DeviceDashboard import DeviceDashboard
 from database import Database
 
 ach=AwsCloudHelper("")
@@ -154,40 +155,45 @@ db=Database()
 # open(os.path.join(constants.absolute_certificate_path,"text.txt"),"w+").close()
 
 #----------------------------------------------
-res=ach.get_thing_group("","Spirit")
-for grp in res:
-    grpDtl=ach.get_group_details(grp["groupName"])
-    groupName=grpDtl['groupName']
-    parentGroupName="-"
-    lat=""
-    lng=""
-    if 'parentGroupName' in grpDtl:
-        parentGroupName=grpDtl['parentGroupName']
-        locRes = ach.get_resource_tags(grpDtl["groupArn"])
-        lat="lat:"+str(locRes["lat"])
-        lng="long:"+str(locRes["lng"])
+# res=ach.get_thing_group("","AccountGrp")
+# for grp in res:
+#     grpDtl=ach.get_group_details(grp["groupName"])
+#     groupName=grpDtl['groupName']
+#     parentGroupName="-"
+#     lat=""
+#     lng=""
+#     if 'parentGroupName' in grpDtl:
+#         parentGroupName=grpDtl['parentGroupName']
+#         locRes = ach.get_resource_tags(grpDtl["groupArn"])
+#         lat="lat:"+str(locRes["lat"])
+#         lng="long:"+str(locRes["long"])
         
-    print("{: <20} {: <20} {: <20} {: <20}".format(grp["groupName"],parentGroupName, lat, lng))
+#     print("{: <20} {: <20} {: <20} {: <20}".format(grp["groupName"],parentGroupName, lat, lng))
 
-def get_sensor_status(thing):
-    #Check if any data exists for the device in last one hour, if yes, then healthy else unhealthy
+# def get_device_status(thing):
+#     #Check if any data exists for the device in last one hour, if yes, then healthy else unhealthy
+#     return "Healthy"
 
-    #Connect to Dyanamo DB and get last details about sensor
-    #check whether sensor has sent data in last one hour.  If yes, then its healty
-
-    return "Healthy"
-
-res=ach.list_things_in_thing_group("Farm1")
-devices=[]
-things=[]
+# res=ach.list_things_in_thing_group("IdealPlace")
+# devices=[]
+# things=[]
 # things=res["things"]
-things.append("thing1")
-for thing in things:
-    dtl=ach.get_farm_tags_by_thing(thing)
-    dtl["status"]=get_sensor_status(thing)
-    devices.append(dtl)
+# # things.append("SoilSensor1")
+# for thing in things:
+#     dtl=ach.get_farm_tags_by_thing(thing)
+#     dtl["status"]=get_device_status(thing)
+#     devices.append(dtl)
 
-for device in devices:
-    print("{: <20} {: <20} {: <20} {: <20} {: <20}".format(dtl["clientId"], dtl["Farm"], dtl["deviceId"],  dtl["deviceType"], dtl["status"]))
+# print("{: <20} {: <20} {: <20} {: <20} {: <20}".format("Account Name", "Farm", "DeviceId",  "DeviceType", "Status"))
+# for device in devices:
+#     print("{: <20} {: <20} {: <20} {: <20} {: <20}".format(dtl["clientId"], dtl["Farm"], dtl["deviceId"],  dtl["deviceType"], dtl["status"]))
 
 #----------------------------------------------s
+from DeviceDashboard import DeviceDashboard
+
+dd=DeviceDashboard()
+dd.getCustomerDetails("Spirit")
+dd.getFarmDetails("AshleyFarm","Spirit")
+dd.getSprinklerActuationSummary()
+dd.getSprinklerActuationSummaryByName("Sprinkler2")
+dd.getSensorDetails("IdealPlace")
