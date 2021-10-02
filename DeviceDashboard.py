@@ -53,7 +53,8 @@ class DeviceDashboard:
         pass
 
     def getSprinklerActuationSummary(self):
+        # get details when this sprinkler get invoked table soil_sensor_alarm
         pass
 
-    def getSprinklerActuationSummaryById(self, sprinklerID):
+    def getSprinklerActuationSummaryByName(self, sprinklerID):
         pass
