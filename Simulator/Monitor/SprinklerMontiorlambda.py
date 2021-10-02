@@ -2,6 +2,7 @@ import json
 import boto3
 from datetime import timezone
 import datetime
+from Simulator.Client.AWSClient import AWSClient
 
 def put_alert(deviceId, alarmtimestamp, action, dynamodb=None):
     if not dynamodb:

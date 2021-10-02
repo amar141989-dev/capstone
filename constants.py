@@ -4,6 +4,7 @@ soil_sensor_data_alarmTableName='soil_sensor_data'
 sprinkler_switch_alarmTableName='sprinkler_switch'
 
 topic_name ='iot/sensors'
+topic_name_for_subscribe='sprinkler/{0}'
 port=8883
 region_name ='us-east-1'
 
