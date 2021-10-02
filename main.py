@@ -12,12 +12,12 @@ dCleanUp=CleanUpScript()
 
 #Below code will start device configuration
 dconfig=DeviceConfiguration()
-# # dconfig.startDeviceConfiguration()
-# # dconfig.downloadRootCa()
+# dconfig.startDeviceConfiguration()
+# dconfig.downloadRootCa()
 
 #This will create required dynamoDb tables
 cTable=TableCreation()
-# # cTable.startTableCreation()
+cTable.startTableCreation()
 
 
 #Create IOT type role manually.  (capstoneIoTRole)
@@ -25,14 +25,14 @@ cTable=TableCreation()
 #Note down arn 
 #Create Rule for Inserting Data in DynamoDB Table
 ruleCreator=RuleCreator()
-# # ruleCreator.createRuleToPushRecordInDynamoDB()
+ruleCreator.createRuleToPushRecordInDynamoDB()
 
 #Download the root CA certificates
 
 
 #Push Data to Dynamo  table using simulator
 invokeSensorSimulator=InvokeSensorSimulator()
-# # invokeSensorSimulator.StartPushingSensorData()
+invokeSensorSimulator.StartPushingSensorData()
 
 
 #create lambda function manually. Lambda Function Name :- sensorDataMonitor
@@ -48,7 +48,7 @@ invokeSensorSimulator=InvokeSensorSimulator()
 #create python script and execute it every five minutes
 
 callLambda =LambdaInvoker ()
-callLambda.callLamdaCron()
+# callLambda.callLamdaCron()
 
 #Run Sprinkler simulator to receive alerts to ON OFF sprinkler from Lamda 
 

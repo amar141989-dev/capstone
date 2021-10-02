@@ -13,7 +13,7 @@ class LambdaInvoker:
         payloadStr = json.dumps(payload)
         payloadBytesArr = bytes(payloadStr, encoding='utf8')
         client = boto3.client('lambda')
-        response = client.invoke(
+        response = client.invoke(   
             FunctionName=functionName,
             InvocationType="RequestResponse",
             Payload=payloadBytesArr

@@ -85,7 +85,7 @@ class CreateDynamoTables:
                     'AttributeType': 'S'
                 },
                 {
-                    'AttributeName': 'alarm',
+                    'AttributeName': 'alarmtimestamp',
                     'AttributeType': 'S'
                 }
             ],
@@ -95,7 +95,7 @@ class CreateDynamoTables:
                     'KeyType': 'HASH'
                 },
                 {
-                    'AttributeName': 'alarm',
+                    'AttributeName': 'alarmtimestamp',
                     'KeyType': 'RANGE'
                 }     
             ],

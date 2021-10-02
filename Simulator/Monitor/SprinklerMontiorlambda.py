@@ -3,6 +3,21 @@ import boto3
 from datetime import timezone
 import datetime
 
+def put_alert(deviceId, alarmtimestamp, action, dynamodb=None):
+    if not dynamodb:
+        dynamodb = boto3.resource('dynamodb')
+
+    table = dynamodb.Table('soil_sensor_alarm')
+    response = table.put_item(
+       Item={
+            'deviceid': deviceId,
+            'alarmtimestamp': alarmtimestamp,
+            'action': action
+        }
+    )
+    return response
+    
+    
 def lambda_handler(event, context):
     
     iotclient = boto3.client('iot-data', region_name='us-east-1')
@@ -36,6 +51,11 @@ def lambda_handler(event, context):
             
     for sprinkler in set(sprinklers):
         response = iotclient.publish(topic='sprinkler/'+sprinkler,qos=1,payload=json.dumps({"Message":"Turn On"}))   
+        
+        #Insert Alarm status to DynamoDB
+        currentDate =  str(datetime.datetime.utcnow())
+        put_alert(sprinkler,currentDate,"Turn On",None)
+        
         print(sprinkler)
 
     # TODO implement
@@ -43,3 +63,5 @@ def lambda_handler(event, context):
         'statusCode': 200,
         'body': json.dumps(sprinklers)
     }
+    
+
