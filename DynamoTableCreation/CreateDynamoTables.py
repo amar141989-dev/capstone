@@ -200,15 +200,7 @@ class CreateDynamoTables:
                 print("Unexpected error: %s" % e)
 
     def deleteAllTables(self):
-        try:
-            devices_table = self.dynamodb.Table(self.weather_dataTableName)
-            devices_table.delete()
-            print("Table '{0}' deleted ".format(self.weather_dataTableName))
-        except ClientError as e:
-            if e.response['Error']['Code'] == 'ResourceNotFoundException':
-                print("Can not delete Dynamo table  '{0}' as it does not exists".format(self.weather_dataTableName))
-            else:
-                print("Unexpected error: %s" % e)
+        
 
 
         try:
@@ -233,14 +225,3 @@ class CreateDynamoTables:
             else:
                 print("Unexpected error: %s" % e)
 
-        try:
-
-            devices_table = self.dynamodb.Table(self.sprinkler_switch_alarmTableName)
-            devices_table.delete()
-            print("Table '{0}' deleted ".format(self.sprinkler_switch_alarmTableName))
-
-        except ClientError as e:
-            if e.response['Error']['Code'] == 'ResourceNotFoundException':
-                print("Can not delete Dynamo table  '{0}' as it does not exists".format(self.sprinkler_switch_alarmTableName))
-            else:
-                print("Unexpected error: %s" % e)
