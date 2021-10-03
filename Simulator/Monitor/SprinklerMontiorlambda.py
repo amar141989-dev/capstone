@@ -2,7 +2,6 @@ import json
 import boto3
 from datetime import timezone
 import datetime
-from Simulator.Client.AWSClient import AWSClient
 
 def put_alert(deviceId, alarmtimestamp, action, dynamodb=None):
     if not dynamodb:
@@ -52,6 +51,7 @@ def lambda_handler(event, context):
             
     for sprinkler in set(sprinklers):
         response = iotclient.publish(topic='sprinkler/'+sprinkler,qos=1,payload=json.dumps({"Message":"Turn On"}))   
+        #response = iotclient.publish(topic='sprinkler/Sprinkler1',qos=1,payload=json.dumps({"Message":"Turn On"}))   
         
         #Insert Alarm status to DynamoDB
         currentDate =  str(datetime.datetime.utcnow())
