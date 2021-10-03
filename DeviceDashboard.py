@@ -27,7 +27,7 @@ class DeviceDashboard:
             print("{: <20} {: <20} {: <20} {: <20}".format(grp["groupName"],parentGroupName, lat, lng))
 
     def getFarmDetails(self, farmName, customerName):
-        print("Getting Farm Details")
+        print("\n\nGetting Farm Details")
 
         res=self.ach.get_thing_group(farmName,customerName)
         print("{: <20} {: <20} {: <20} {: <20}".format("Farm Name","Customer Name", "lat", "lng"))
@@ -47,6 +47,7 @@ class DeviceDashboard:
             print("{: <20} {: <20} {: <20} {: <20}".format(grp["groupName"],parentGroupName, lat, lng))
 
     def getSensorDetails(self, farmName):
+        print("\n\nGetting Sensor Details")
         #connect dyanamo and get latest timestamp when data received
         #derive health of sensor
         #show recent sensor data received
@@ -69,6 +70,8 @@ class DeviceDashboard:
             print("{: <20} {: <20} {: <20} {: <20} {: <20}".format(dtl["clientId"], dtl["Farm"], dtl["deviceId"],  dtl["deviceType"], dtl["status"]))
 
     def getSprinklerActuationSummary(self):
+        print("\n\nGetting Sprinkler & Actutation Details")
+
         # get details when this sprinkler get invoked table soil_sensor_alarm
         res=self.db.get_data(constants.soil_sensor_alarmTableName, 100)
         print("{: <20} {: <20} {: <20}".format("DeviceId","Action", "Timestamp"))
@@ -77,6 +80,7 @@ class DeviceDashboard:
 
 
     def getSprinklerActuationSummaryByName(self, sprinklerName):
+        print("\n\nGetting Sprinkler & Actutation by Name")
         res=self.db.get_data_by_key(constants.soil_sensor_alarmTableName, sprinklerName)
         print("{: <20} {: <20} {: <20}".format("DeviceId","Action", "Timestamp"))
         for item in res:
